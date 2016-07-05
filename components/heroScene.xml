@@ -1,34 +1,28 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
-<component name="HeroScene" extends="Scene" initialFocus="rowList" >
+<!-- Copyright 2016 Roku Corp.  All Rights Reserved. -->
+
+<component name="HeroScene" extends="Scene" >
 
   <children>
+    <!-- RowList on HeroScene -->
+    <HeroGrid
+      id="HeroGrid"
+      visible="true"
+      translation="[0,0]"/>
 
-    <RowList
-	    id="RowList"
-      translation="[0,150]"
-      itemComponentName="PosterItem"
-      itemSize="[1920,254]"
-      numRows="5"
-      rowItemSize="[[1220,591],[351,197]]"
-      rowHeights="[648,254]"
-      rowItemSpacing="[[54,0],[18,0]]"
-      focusXOffset="[350,47]"
-      rowLabelOffset="[[47,8]]"
-      showRowLabel="[true]"
-      showRowCounter="[true]"
-      rowFocusAnimationStyle="fixedFocusWrap"/>
-
+    <!-- Overhang Node -->
     <Overhang
-      title="RokuDevExamples"
-      showClock="true" />
+      showClock="true"
+      title="RokuDevExamples" />
 
+    <!-- Details screen with play button -->
     <DetailsScreen
       id="DetailsScreen"
       visible="false" />
 
     <LoadingIndicator
-      id="loadingIndicator"
+      id="LoadingIndicator"
       imageUri="pkg:/components/LoadingIndicator/loader.png"
       clockwise="true"
       spinInterval="2"
@@ -46,5 +40,11 @@
       backgroundOpacity="0"/>
   </children>
 
+  <interface>
+    <field id="gridContent" type="node" alias="HeroGrid.content" onChange="OnChangeContent" />
+    <field id="rowItemSelected" type="intarray" alias="HeroGrid.rowItemSelected" alwaysNotify="true" onChange="OnRowItemSelected" />
+  </interface>
+
   <script type="text/brightscript" uri="pkg:/components/HeroScene.brs" />
+
 </component>

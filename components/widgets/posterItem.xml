@@ -16,6 +16,7 @@
       End Sub
 
       Sub itemContentChanged()
+        print "hi"
         m.Poster.uri = m.top.itemContent.HDPOSTERURL
         updateLayout()
       End Sub
