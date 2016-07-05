@@ -12,7 +12,7 @@
 			Sub Init()
 			    m.top.functionName = "loadContent"
 			End Sub
-    
+
 			Sub loadContent()
 			    oneRow = GetApiArray()
 			    list = [
@@ -39,14 +39,14 @@
 			    ]
 			    m.top.content = ParseXMLContent(list)
 			End Sub
-			
+
 			Function ParseXMLContent(list As Object)
 			    RowItems = createObject("RoSGNode","ContentNode")
-			    
+
 			    for each rowAA in list
 			        row = createObject("RoSGNode","ContentNode")
 			        row.Title = rowAA.Title
-			
+
 			        for each itemAA in rowAA.ContentList
 			            item = createObject("RoSGNode","ContentNode")
 			            item.SetFields(itemAA)
@@ -54,24 +54,24 @@
 			        end for
 			        RowItems.appendChild(row)
 			    end for
-			
+
 			    return RowItems
 			End Function
-			
-			
+
+
 			Function GetApiArray()
 			    url = CreateObject("roUrlTransfer")
 			    url.SetUrl("http://api.delvenetworks.com/rest/organizations/59021fabe3b645968e382ac726cd6c7b/channels/1cfd09ab38e54f48be8498e0249f5c83/media.rss")
 			    rsp = url.GetToString()
-			
+
 			    responseXML = ParseXML(rsp)
-			    If responseXML<>invalid then 
+			    If responseXML<>invalid then
 				    responseXML = responseXML.GetChildElements()
 				    responseArray = responseXML.GetChildElements()
-				End If    
-			
+				End If
+
 			    result = []
-			    
+
 			    for each xmlItem in responseArray
 			        if xmlItem.getName() = "item"
 			            itemAA = xmlItem.GetChildElements()
@@ -83,7 +83,7 @@
 			                        item.stream = {url : xmlItem.url}
 			                        item.url = xmlItem.getAttributes().url
 			                        item.streamFormat = "mp4"
-			                        
+
 			                        mediaContent = xmlItem.GetChildElements()
 			                        for each mediaContentItem in mediaContent
 			                            if mediaContentItem.getName() = "media:thumbnail"
@@ -97,21 +97,21 @@
 			            end if
 			        end if
 			    end for
-			
+
 			    return result
 			End Function
-			
-			
+
+
 			Function ParseXML(str As String) As dynamic
 			    if str = invalid return invalid
 			    xml = CreateObject("roXMLElement")
 			    if not xml.Parse(str) return invalid
 			    return xml
 			End Function
-			
+
 			function SelectTo(array as Object, num = 25 as Integer) as Object
 			     result = []
-			     for each item in array 
+			     for each item in array
 			         result.push(item)
 			         if result.Count() >= num then
 			             exit for
@@ -121,4 +121,3 @@
 			end Function]]>
     </script>
 </component>
-
