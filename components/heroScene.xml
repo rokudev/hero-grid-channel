@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<component name="HeroScene" extends="Scene" initialFocus="TestListContent" >
+  <children>
+    <Overhang
+      title="RokuDevExamples"
+      showClock="true"
+      />
+    <LabelList
+        id="TestListContent"
+        translation="[100, 250]"
+        itemSize="[800, 72]"
+        itemSpacing="[15, 15]"
+        numRows="15"
+        focusRow="0">
+    </LabelList>
+  </children>
+
+  <script type="text/brightscript" uri="pkg:/components/heroScene.brs" />
+</component>
