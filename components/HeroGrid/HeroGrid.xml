@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!-- Copyright 2016 Roku Corp.  All Rights Reserved. -->
+
+<component name="HeroGrid" extends="Group" initialFocus="RowList" >
+
+  <children>
+    <FadingBackground
+      id="Background"
+      width="1920"
+      height="1080"
+      color="0xAAAAAA"
+      ShadeOpacity="0.8" />
+
+    <RowList
+	    id="RowList"
+      focusXOffset="[350,47]"
+      itemComponentName="PosterItem"
+      itemSize="[1920,254]"
+      numRows="5"
+      rowFocusAnimationStyle="fixedFocusWrap"
+      rowHeights="[648,254]"
+      rowItemSize="[[1220,591],[351,197]]"
+      rowItemSpacing="[[54,0],[18,0]]"
+      rowLabelOffset="[[47,8]]"
+      showRowLabel="[true]"
+      showRowCounter="[true]"
+      translation="[0,150]" />
+
+    <Poster
+      translation="[0, 1000]"
+      uri="pkg:/images/BG_dark_down.png"
+      width="2000"
+      height="95" />
+
+  </children>
+
+  <interface>
+    <!-- Grid Content Node -->
+    <field id="content" type="node" alias="RowList.content" onChange="onContentChange"/>
+
+    <!-- Row item selection handler -->
+    <field id="rowItemSelected" type="intarray" alias="RowList.rowItemSelected" alwaysnotify="true"/>
+
+    <!-- Row item focused handler -->
+    <field id="itemFocused" type="intarray" alias="RowList.rowItemFocused" onChange="OnItemFocused"/>
+
+    <!-- Interface to focused item (Content Node) -->
+    <field id="focusedContent"  type="node"/>
+  </interface>
+
+  <script type="text/brightscript" uri="pkg:/components/HeroGrid/HeroGrid.brs" />
+</component>

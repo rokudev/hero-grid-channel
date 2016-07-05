@@ -11,16 +11,15 @@
     <!-- Background poster -->
     <Poster
       id="Background"
-      width="1280"
-      height="720"
-      />
+      width="1920"
+      height="1080" />
+
     <Rectangle
       translation="[0,0]"
-      width="1280"
-      height="720"
+      width="1920"
+      height="1080"
       color="0x000000"
-      opacity="0.8"
-      />
+      opacity="0.8" />
 
     <!-- Control buttons -->
     <LabelList
@@ -30,47 +29,43 @@
       focusedColor="0x333333FF"
       numRows="7"
       vertFocusAnimationStyle="floatingFocus"
-      itemSize="[250, 35]"
-      />
+      itemSize="[250, 35]" />
 
     <!-- Black hud at bottom of the Details Screen -->
     <Rectangle
       id="testRectangle"
       color="0x000000FF"
-      width="1280"
-      height="251"
-      translation="[0, 462]"  />
+      width="1920"
+      height="300"
+      translation="[0, 462]" />
 
     <!-- Item description -->
     <Description
       id="Description"
       translation="[430, 475]"
-      itemSpacings="[7, 16]"
-      />
+      itemSpacings="[7, 16]" />
 
     <!-- Item poster -->
     <Poster
       id="Poster"
       translation="[60, 495]"
       width="317"
-      height="178"
-      />
+      height="178" />
 
     <!-- Overhang -->
     <Poster
       translation="[79, 36]"
       uri="pkg:/images/overhangLogo.png"
       width="156"
-      height="49"  />
+      height="49" />
 
     <!-- Playback node -->
     <Video
       id="VideoPlayer"
       visible="false"
       translation="[0, 0]"
-      width="1280"
-      height="720"
-      />
+      width="1920"
+      height="1080" />
 
   </children>
 

@@ -1,36 +1,54 @@
+' ********** Copyright 2016 Roku Corp.  All Rights Reserved. **********
 
 'init(): 1st function that runs on channel startup
 sub init()
-  print "starting init"
-
-  ' RowList Node
-  m.rowList = m.top.FindNode("RowList")
-  m.rowList.SetFocus(true)
-
+  'To see debug, telnet on port 8089'
+  print "[HeroScene] Init"
+  ' HeroGrid Node with RowList
+  m.HeroGrid= m.top.FindNode("HeroGrid")
+  ' DetailsScreen Node with description & video player
   m.DetailsScreen = m.top.FindNode("DetailsScreen")
+  ' The spinning wheel
+  m.LoadingIndicator = m.top.findNode("LoadingIndicator")
+end sub
 
-  m.LoadTask = CreateObject("roSGNode", "RowListContentTask")
-  m.LoadTask.observeField("content","rowListContentChanged")
-  m.LoadTask.control = "RUN"
+' if content set, focus on GridScreen
+sub OnChangeContent()
+    m.HeroGrid.setFocus(true)
+    m.loadingIndicator.control = "stop"
+end sub
 
-  ' set focus on the Scene (which will set focus on the initialFocus node)
-  'print "LABELLIST itemSize"; m.rowList.itemSize
-  'print "LABELLIST translation"; m.rowList.translation
+' Row item selected handler
+sub OnRowItemSelected()
+  print "rowItemSelected()!!!!!"
+  ' On select any item on home scene, show Details node and hide Grid
+  m.HeroGrid.visible = "false"
+  m.DetailsScreen.content = m.HeroGrid.focusedContent
+  m.DetailsScreen.setFocus(true)
+  m.DetailsScreen.visible = "true"
 end sub
 
 function onKeyEvent(key as String, press as Boolean) as Boolean
-  print "in testList.xml onKeyEvent ";key;" "; press
+  ? ">>> HomeScene >> OnkeyEvent"
+  result = false
+  print "in HeroScene.xml onKeyEvent ";key;" "; press
   if press then
     if key = "back"
-      print "back pressed"
+      print "back button pressed"
+      ' if Details opened
+      if m.HeroGrid.visible = false and m.DetailsScreen.videoPlayerVisible = false
+        m.HeroGrid.visible = "true"
+        m.detailsScreen.visible = "false"
+        m.HeroGrid.setFocus(true)
+        result = true
+      ' if video player opened
+      else if m.HeroGrid.visible = false and m.DetailsScreen.videoPlayerVisible = true
+        m.DetailsScreen.videoPlayerVisible = false
+        result = true
+      end if
     else if key = "home"
       print "home pressed"
     end if
   end if
-  return false
+  return result
 end function
-
-sub rowListContentChanged()
-  print "rowListContentChanged()"
-  m.RowList.content = m.LoadTask.content
-end sub
