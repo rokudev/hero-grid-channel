@@ -12,23 +12,40 @@
       color="0xAAAAAA"
       ShadeOpacity="0.8" />
 
-    <RowList
-	    id="RowList"
-      focusXOffset="[350,47]"
-      itemComponentName="PosterItem"
-      itemSize="[1920,254]"
-      numRows="5"
-      rowFocusAnimationStyle="fixedFocusWrap"
-      rowHeights="[648,254]"
-      rowItemSize="[[1220,591],[351,197]]"
-      rowItemSpacing="[[54,0],[18,0]]"
-      rowLabelOffset="[[47,8]]"
-      showRowLabel="[true]"
-      showRowCounter="[true]"
-      translation="[0,160]" />
+    <LayoutGroup
+      id="Panel"
+      layoutDirection="vert"
+      horizAlignment="left"
+      vertAlignment="bottom"
+      addItemSpacingAfterChild="true" >
+
+      <RowList
+  	    id="RowList"
+        focusXOffset="[350,47]"
+        itemComponentName="PosterItem"
+        itemSize="[1920,254]"
+        numRows="5"
+        rowFocusAnimationStyle="fixedFocusWrap"
+        rowHeights="[648,254,254,508,254]"
+        rowItemSize="[[1220,591],[351,197],[351,197],[300,450],[351,197]]"
+        rowItemSpacing="[[54,0],[18,0]]"
+        rowLabelOffset="[[47,8]]"
+        showRowLabel="[true]"
+        showRowCounter="[true]"
+        translation="[0,160]" />
+
+      <PosterGrid
+        id="PosterGrid"
+        basePosterSize="[351,197]"
+        numColumns="4"
+        posterDisplayMode="scaleToFit"
+        rowHeights="[120,120,120,120,80,80,80,80]"
+        translation="[0,1000]"/>
+
+    </LayoutGroup>
 
     <Poster
-      translation="[0, 1000]"
+      translation="[0,1000]"
       uri="pkg:/images/BG_dark_down.png"
       width="2000"
       height="95" />
@@ -38,6 +55,7 @@
   <interface>
     <!-- Grid Content Node -->
     <field id="content" type="node" alias="RowList.content" onChange="onContentChange"/>
+    <field id="content2" type="node" alias="PosterGrid.content" onChange="onContentChange2"/>
 
     <!-- Row item selection handler -->
     <field id="rowItemSelected" type="intarray" alias="RowList.rowItemSelected" alwaysnotify="true"/>

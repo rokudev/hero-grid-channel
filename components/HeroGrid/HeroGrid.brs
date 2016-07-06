@@ -6,22 +6,24 @@ sub Init()
 
   'Get references to child nodes
   m.rowList       =   m.top.findNode("RowList")
+  m.posterGrid    =   m.top.findNode("PosterGrid")
   m.background    =   m.top.findNode("Background")
 
-  'Create a task node to get the grid content
+  'Create a task node to fetch the grid content
   m.LoadTask = CreateObject("roSGNode", "RowListContentTask")
   m.LoadTask.control = "RUN"
 
   'Create observer events for when content is loaded
-  m.LoadTask.observeField("content","rowListContentChanged")
+  m.LoadTask.observeField("ready","onContentReady")
   m.top.observeField("visible", "onVisibleChange")
   m.top.observeField("focusedChild", "OnFocusedChildChange")
 end sub
 
-' rowListContentChanged(): observer to handle when content loads
-sub rowListContentChanged()
-  print "rowListContentChanged() - ContentReady!"
-  m.RowList.content = m.LoadTask.content
+' onContentReady(): observer to handle when content loads
+sub onContentReady()
+  print "onContentReady() - ContentReady!"
+  m.RowList.content = m.LoadTask.rowContent
+  m.posterGrid.content = m.LoadTask.gridContent
 end sub
 
 ' set proper focus to RowList in case if return from Details Screen

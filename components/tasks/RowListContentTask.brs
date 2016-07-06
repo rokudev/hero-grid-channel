@@ -26,27 +26,12 @@ Sub loadContent()
         ContentList : SelectTo(oneRow, 25)
     }
   ]
-  m.top.content = ParseXMLContent(list)
+  print "Creating Content Nodes"
+  m.top.rowContent = ParseXMLContent(list)
+  m.top.gridContent = CreateGridContent(list[0])
+  m.top.ready = true
+  print "Done"
 End Sub
-
-Function ParseXMLContent(list As Object)
-  RowItems = createObject("RoSGNode","ContentNode")
-
-  for each rowAA in list
-    row = createObject("RoSGNode","ContentNode")
-    row.Title = rowAA.Title
-
-    for each itemAA in rowAA.ContentList
-      item = createObject("RoSGNode","ContentNode")
-      item.SetFields(itemAA)
-      row.appendChild(item)
-    end for
-    RowItems.appendChild(row)
-  end for
-
-  return RowItems
-End Function
-
 
 Function GetApiArray()
   url = CreateObject("roUrlTransfer")
@@ -95,6 +80,36 @@ Function ParseXML(str As String) As dynamic
   xml = CreateObject("roXMLElement")
   if not xml.Parse(str) return invalid
   return xml
+End Function
+
+Function ParseXMLContent(list As Object)
+  RowItems = createObject("RoSGNode","ContentNode")
+
+  for each rowAA in list
+    row = createObject("RoSGNode","ContentNode")
+    row.Title = rowAA.Title
+
+    for each itemAA in rowAA.ContentList
+      item = createObject("RoSGNode","ContentNode")
+      item.SetFields(itemAA)
+      row.appendChild(item)
+    end for
+    RowItems.appendChild(row)
+  end for
+
+  return RowItems
+End Function
+
+Function CreateGridContent(list As Object)
+  ParentNode = createObject("RoSGNode","ContentNode")
+
+  for each itemAA in list.ContentList
+    item = createObject("RoSGNode","ContentNode")
+    item.SetFields(itemAA)
+    ParentNode.appendChild(item)
+  end for
+
+  return ParentNode
 End Function
 
 function SelectTo(array as Object, num = 25 as Integer) as Object

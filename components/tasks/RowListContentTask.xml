@@ -3,7 +3,9 @@
 <component name="RowListContentTask" extends="Task">
 
   <interface>
-      <field id="content" type="node" />
+      <field id="ready" type="boolean" value="false" />
+      <field id="rowContent" type="node" />
+      <field id="gridContent" type="node" />
   </interface>
 
   <script type="text/brightscript" uri="pkg:/components/tasks/RowListContentTask.brs" />
