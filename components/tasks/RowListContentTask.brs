@@ -6,23 +6,23 @@ Sub loadContent()
   oneRow = GetApiArray()
   list = [
     {
-        Title:"First row"
+        Title:"Big Hits"
         ContentList : SelectTo(oneRow, 25)
     }
     {
-        Title:"Second row"
+        Title:"Action"
         ContentList : SelectTo(oneRow, 6)
     }
     {
-        Title:"Third row"
+        Title:"Drama"
         ContentList : SelectTo(oneRow, 25)
     }
     {
-        Title:"Forth row"
+        Title:"Explosions"
         ContentList : SelectTo(oneRow, 5)
     }
     {
-        Title:"Fifth row"
+        Title:"Everybody loves Chris"
         ContentList : SelectTo(oneRow, 25)
     }
   ]

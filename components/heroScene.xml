@@ -21,6 +21,13 @@
       id="DetailsScreen"
       visible="false" />
 
+    <!-- Warning if bad URL request/timeout -->
+    <Dialog
+      id="WarningDialog"
+      title="Content Load Timeout"
+      message="The content is not available at this time. Try again later."
+      visible="false" />
+
     <LoadingIndicator
       id="LoadingIndicator"
       imageUri="pkg:/components/LoadingIndicator/loader.png"
