@@ -45,7 +45,7 @@ sub OnItemFocused()
   'When an item gains the key focus, set to a 2-element array,
   'where element 0 contains the index of the focused row,
   'and element 1 contains the index of the focused item in that row.
-  If itemFocused.Count() = 2 then
+  if itemFocused.Count() = 2 then
     focusedContent            = m.top.content.getChild(itemFocused[0]).getChild(itemFocused[1])
     if focusedContent <> invalid then
       m.top.focusedContent    = focusedContent
