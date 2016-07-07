@@ -5,6 +5,7 @@
 <component name="HeroScreen" extends="Group" initialFocus="RowList" >
 
   <children>
+
     <FadingBackground
       id="Background"
       width="1920"
@@ -12,38 +13,20 @@
       color="0xAAAAAA"
       ShadeOpacity="0.8" />
 
-    <LayoutGroup
-      id="VerticalGroup"
-      layoutDirection="vert"
-      addItemSpacingAfterChild="true"
-      translation="[0,135]" >
-
-      <RowList
-  	    id="RowList"
-        focusXOffset="[350,47]"
-        itemComponentName="PosterItem"
-        itemSize="[1920,254]"
-        numRows="5"
-        rowFocusAnimationStyle="fixedFocusWrap"
-        rowHeights="[648,254,254,508,254]"
-        rowItemSize="[[1220,591],[351,197],[351,197],[300,450],[351,197]]"
-        rowItemSpacing="[[54,0],[18,0]]"
-        rowLabelOffset="[[47,8]]"
-        showRowLabel="[true]"
-        showRowCounter="[true]"/>
-
-      <PosterGrid
-        id="PosterGrid"
-        basePosterSize="[351,197]"
-        itemSpacing="[4,8]"
-        numRows="3"
-        numColumns="4"
-        posterDisplayMode="scaleToFit"
-        rowHeights="[350,350,350]"
-        columnWidths="[200,200,200,200]"
-        translation="[100,100]"/>
-
-    </LayoutGroup>
+    <RowList
+	    id="RowList"
+      focusXOffset="[165]"
+      itemComponentName="PosterItem"
+      itemSize="[1920,240]"
+      numRows="9"
+      rowFocusAnimationStyle="FixedFocusWrap"
+      rowHeights="[800,254,254,584,254,220,220,220,220]"
+      rowItemSize="[[1600,700],[375,197],[375,197],[375,526],[375,197]]"
+      rowItemSpacing="[[30,0]]"
+      rowLabelOffset="[[165,8]]"
+      showRowLabel="[false,false,true]"
+      showRowCounter="[true,true,true,true,true,false]"
+      translation="[0,155]"/>
 
     <Poster
       translation="[0,1000]"
@@ -56,7 +39,6 @@
   <interface>
     <!-- Grid Content Node -->
     <field id="content" type="node" alias="RowList.content" onChange="onContentChange"/>
-    <field id="content2" type="node" alias="PosterGrid.content" onChange="onContentChange2"/>
 
     <!-- Row item selection handler -->
     <field id="rowItemSelected" type="intarray" alias="RowList.rowItemSelected" alwaysnotify="true"/>

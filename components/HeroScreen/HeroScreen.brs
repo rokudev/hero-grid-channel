@@ -1,42 +1,39 @@
 ' ********** Copyright 2016 Roku Corp.  All Rights Reserved. **********
 
 sub Init()
-  ? "[HeroScreen] Init"
+  ? "[HeroGrid] Init"
   m.top.setFocus(true)
 
   'Get references to child nodes
-  m.verticalGroup =   m.top.findNode("VerticalGroup")
-  m.rowList       =   m.top.findNode("RowList")
-  m.posterGrid    =   m.top.findNode("PosterGrid")
+  m.RowList       =   m.top.findNode("RowList")
   m.background    =   m.top.findNode("Background")
 
   'Create a task node to fetch the grid content
   m.LoadTask = CreateObject("roSGNode", "RowListContentTask")
   m.LoadTask.control = "RUN"
 
+
   'Create observer events for when content is loaded
-  m.LoadTask.observeField("ready","onContentReady")
+  m.LoadTask.observeField("content","rowListContentChanged")
   m.top.observeField("visible", "onVisibleChange")
   m.top.observeField("focusedChild", "OnFocusedChildChange")
 end sub
 
-' onContentReady(): observer to handle when content loads
-sub onContentReady()
-  print "onContentReady() - ContentReady!"
-  m.RowList.content = m.LoadTask.rowContent
-  m.posterGrid.content = m.LoadTask.gridContent
+' rowListContentChanged(): observer to handle when content loads
+sub rowListContentChanged()
+  print "rowListContentChanged() - ContentReady!"
+  m.RowList.content = m.LoadTask.content
 end sub
 
 ' set proper focus to RowList in case if return from Details Screen
 sub onVisibleChange()
   if m.top.visible = true then
-    m.posterGrid.setFocus(true)
+    m.rowList.setFocus(true)
   end if
 end sub
 
 ' set proper focus to RowList in case if return from Details Screen
 Sub OnFocusedChildChange()
-  print "OnFocusedChildChange!!!!"
   if m.top.isInFocusChain() and not m.rowList.hasFocus() then
     m.rowList.setFocus(true)
   end if
@@ -44,7 +41,6 @@ End Sub
 
 ' handler of focused item in RowList
 sub OnItemFocused()
-  print "OnItemFocused!!!!!"
   itemFocused = m.top.itemFocused
 
   'When an item gains the key focus, set to a 2-element array,
@@ -58,15 +54,3 @@ sub OnItemFocused()
     end if
   end if
 end sub
-
-function onKeyEvent(key as String, press as Boolean) as Boolean
-  ? ">>> HeroScreen >> OnkeyEvent"
-  print "in HeroScreen.brs onKeyEvent ";key;" "; press
-  result = false
-  if press then
-    if key = "down"
-      m.posterGrid.setFocus(true)
-    end if
-  end if
-  return result
-end function
