@@ -11,7 +11,7 @@ Sub loadContent()
     }
     {
         Title:"Action"
-        ContentList : SelectTo(oneRow, 6)
+        ContentList : SelectTo(oneRow, 9)
     }
     {
         Title:"Drama"
@@ -19,7 +19,7 @@ Sub loadContent()
     }
     {
         Title:"Explosions"
-        ContentList : SelectTo(oneRow, 5)
+        ContentList : SelectTo(oneRow, 9)
     }
     {
         Title:"Everybody loves Chris"
@@ -27,9 +27,7 @@ Sub loadContent()
     }
   ]
   print "Creating Content Nodes"
-  m.top.rowContent = ParseXMLContent(list)
-  m.top.gridContent = CreateGridContent(oneRow)
-  m.top.ready = true
+  m.top.content = CreateGridContent(ParseXMLContent(list), list[0].contentList)
   print "Done"
 End Sub
 
@@ -102,16 +100,22 @@ Function ParseXMLContent(list As Object)
   return RowItems
 End Function
 
-Function CreateGridContent(list As Object)
-  ParentNode = createObject("RoSGNode","ContentNode")
-
-  for each itemAA in list
-    item = createObject("RoSGNode","ContentNode")
-    item.SetFields(itemAA)
-    ParentNode.appendChild(item)
+Function CreateGridContent(RowItems As Object, list As Object)
+  for i = 0 to list.count() step 4
+    row = createObject("RoSGNode","ContentNode")
+    if i = 0
+      row.Title="THE GRID"
+    end if
+    for j = i to i+3
+      item = createObject("RoSGNode","ContentNode")
+      item.SetFields(list[j])
+      row.appendChild(item)
+    end for
+    RowItems.appendChild(row)
   end for
 
-  return ParentNode
+  print "ok"
+  return RowItems
 End Function
 
 function SelectTo(array as Object, num = 25 as Integer) as Object
