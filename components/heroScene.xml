@@ -6,8 +6,8 @@
 
   <children>
     <!-- RowList on HeroScene -->
-    <HeroGrid
-      id="HeroGrid"
+    <HeroScreen
+      id="HeroScreen"
       visible="true"
       translation="[0,0]"/>
 
@@ -48,8 +48,8 @@
   </children>
 
   <interface>
-    <field id="gridContent" type="node" alias="HeroGrid.content" onChange="OnChangeContent" />
-    <field id="rowItemSelected" type="intarray" alias="HeroGrid.rowItemSelected" alwaysNotify="true" onChange="OnRowItemSelected" />
+    <field id="gridContent" type="node" alias="HeroScreen.content" onChange="OnChangeContent" />
+    <field id="rowItemSelected" type="intarray" alias="HeroScreen.rowItemSelected" alwaysNotify="true" onChange="OnRowItemSelected" />
   </interface>
 
   <script type="text/brightscript" uri="pkg:/components/HeroScene.brs" />
