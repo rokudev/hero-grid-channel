@@ -2,7 +2,7 @@
 
 <!-- Copyright 2016 Roku Corp.  All Rights Reserved. -->
 
-<component name="HeroGrid" extends="Group" initialFocus="RowList" >
+<component name="HeroScreen" extends="Group" initialFocus="RowList" >
 
   <children>
     <FadingBackground
@@ -13,11 +13,10 @@
       ShadeOpacity="0.8" />
 
     <LayoutGroup
-      id="Panel"
+      id="VerticalGroup"
       layoutDirection="vert"
-      horizAlignment="left"
-      vertAlignment="bottom"
-      addItemSpacingAfterChild="true" >
+      addItemSpacingAfterChild="true"
+      translation="[0,135]" >
 
       <RowList
   	    id="RowList"
@@ -31,16 +30,18 @@
         rowItemSpacing="[[54,0],[18,0]]"
         rowLabelOffset="[[47,8]]"
         showRowLabel="[true]"
-        showRowCounter="[true]"
-        translation="[0,160]" />
+        showRowCounter="[true]"/>
 
       <PosterGrid
         id="PosterGrid"
         basePosterSize="[351,197]"
+        itemSpacing="[4,8]"
+        numRows="3"
         numColumns="4"
         posterDisplayMode="scaleToFit"
-        rowHeights="[120,120,120,120,80,80,80,80]"
-        translation="[0,1000]"/>
+        rowHeights="[350,350,350]"
+        columnWidths="[200,200,200,200]"
+        translation="[100,100]"/>
 
     </LayoutGroup>
 
@@ -67,5 +68,5 @@
     <field id="focusedContent"  type="node"/>
   </interface>
 
-  <script type="text/brightscript" uri="pkg:/components/HeroGrid/HeroGrid.brs" />
+  <script type="text/brightscript" uri="pkg:/components/HeroScreen/HeroScreen.brs" />
 </component>

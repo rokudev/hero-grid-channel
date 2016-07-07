@@ -1,10 +1,11 @@
 ' ********** Copyright 2016 Roku Corp.  All Rights Reserved. **********
 
 sub Init()
-  ? "[HeroGrid] Init"
+  ? "[HeroScreen] Init"
   m.top.setFocus(true)
 
   'Get references to child nodes
+  m.verticalGroup =   m.top.findNode("VerticalGroup")
   m.rowList       =   m.top.findNode("RowList")
   m.posterGrid    =   m.top.findNode("PosterGrid")
   m.background    =   m.top.findNode("Background")
@@ -29,12 +30,13 @@ end sub
 ' set proper focus to RowList in case if return from Details Screen
 sub onVisibleChange()
   if m.top.visible = true then
-    m.rowList.setFocus(true)
+    m.posterGrid.setFocus(true)
   end if
 end sub
 
 ' set proper focus to RowList in case if return from Details Screen
 Sub OnFocusedChildChange()
+  print "OnFocusedChildChange!!!!"
   if m.top.isInFocusChain() and not m.rowList.hasFocus() then
     m.rowList.setFocus(true)
   end if
@@ -42,6 +44,7 @@ End Sub
 
 ' handler of focused item in RowList
 sub OnItemFocused()
+  print "OnItemFocused!!!!!"
   itemFocused = m.top.itemFocused
 
   'When an item gains the key focus, set to a 2-element array,
@@ -55,3 +58,15 @@ sub OnItemFocused()
     end if
   end if
 end sub
+
+function onKeyEvent(key as String, press as Boolean) as Boolean
+  ? ">>> HeroScreen >> OnkeyEvent"
+  print "in HeroScreen.brs onKeyEvent ";key;" "; press
+  result = false
+  if press then
+    if key = "down"
+      m.posterGrid.setFocus(true)
+    end if
+  end if
+  return result
+end function

@@ -28,7 +28,7 @@ Sub loadContent()
   ]
   print "Creating Content Nodes"
   m.top.rowContent = ParseXMLContent(list)
-  m.top.gridContent = CreateGridContent(list[0])
+  m.top.gridContent = CreateGridContent(oneRow)
   m.top.ready = true
   print "Done"
 End Sub
@@ -38,7 +38,7 @@ Function GetApiArray()
   url.SetUrl("http://api.delvenetworks.com/rest/organizations/59021fabe3b645968e382ac726cd6c7b/channels/1cfd09ab38e54f48be8498e0249f5c83/media.rss")
   rsp = url.GetToString()
 
-  responseXML = ParseXML(rsp)
+  responseXML = ParseResponse(rsp)
   If responseXML<>invalid then
     responseXML = responseXML.GetChildElements()
     responseArray = responseXML.GetChildElements()
@@ -63,6 +63,7 @@ Function GetApiArray()
               if mediaContentItem.getName() = "media:thumbnail"
                 item.HDPosterUrl = mediaContentItem.getattributes().url
                 item.hdBackgroundImageUrl = mediaContentItem.getattributes().url
+                item.uri = mediaContentItem.getAttributes().url
               end if
             end for
           end if
@@ -75,9 +76,10 @@ Function GetApiArray()
   return result
 End Function
 
-Function ParseXML(str As String) As dynamic
+Function ParseResponse(str As String) As dynamic
   if str = invalid return invalid
   xml = CreateObject("roXMLElement")
+  ' Return invalid if string can't be parsed
   if not xml.Parse(str) return invalid
   return xml
 End Function
@@ -103,7 +105,7 @@ End Function
 Function CreateGridContent(list As Object)
   ParentNode = createObject("RoSGNode","ContentNode")
 
-  for each itemAA in list.ContentList
+  for each itemAA in list
     item = createObject("RoSGNode","ContentNode")
     item.SetFields(itemAA)
     ParentNode.appendChild(item)
