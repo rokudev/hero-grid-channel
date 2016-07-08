@@ -3,9 +3,10 @@
 <component name="UriHandler" extends="Task" >
 
 <interface>
+  <!-- Field to issue a request to the handler -->
 	<field id="request" type="assocarray"/>
-  <!-- Contains an AA with the content and a boolean that says whether or not it worked -->
-  <field id="response" type="assocarray"/>
+  <!-- Contains the response content -->
+  <field id="content" type="node"/>
 </interface>
 
 <script type="text/brightscript" uri="pkg:/components/UriHandler/UriHandler.brs"/>

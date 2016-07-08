@@ -11,7 +11,7 @@
 ' Description: sets the execution function for the UriFetcher
 ' 						 and tells the UriFetcher to run
 sub init()
-  ? "[UriFetcher] Init"
+  ? "[init] - UriHandler.brs"
   ' create the message port
 	m.port = createObject("roMessagePort")
 	m.top.observeField("request", m.port)
@@ -20,8 +20,8 @@ sub init()
 end sub
 
 ' go(): The "Task" function.
-'   Has the event loop which calls the appropriate functions for
-'   handling requests made by the CM and responses when requests are finished
+'   Has an event loop which calls the appropriate functions for
+'   handling requests made by the HeroScreen and responses when requests are finished
 ' variables:
 '   m.jobsById: AA storing HTTP transactions where:
 '			key: id of HTTP request
@@ -31,7 +31,7 @@ end sub
 '       - key: xfer
 '         val: the roUrlTransfer object
 sub go()
-  print "in go()"
+  print "[go] - UriHandler.brs"
   m.jobsById = {}
 	' UriFetcher event loop
 	while true
@@ -67,7 +67,7 @@ end sub
 '   True if request succeeds
 ' 	False if invalid request
 function addRequest(request as Object) as Boolean
-  print "in addRequest()"
+  print "[addRequest] - UriHandler.brs"
 	' If valid request
   if type(request) = "roAssociativeArray"
     context = request.context
@@ -90,6 +90,7 @@ function addRequest(request as Object) as Boolean
   		    print "UriFetcher: initiating transfer '"; idkey; "' for URI '"; uri; "'"; " succeeded: "; ok
         else
           print "UriFetcher: invalid uri: "; uri
+          m.top.content = invalid
   			end if
       end if
   	else
@@ -105,7 +106,7 @@ end function
 ' parameters:
 ' 	msg: a roUrlEvent (https://sdkdocs.roku.com/display/sdkdoc/roUrlEvent)
 sub processResponse(msg as Object)
-  print "in processResponse"
+  print "[processResponse] - UriHandler.brs"
 	idKey = stri(msg.GetSourceIdentity()).trim()
 	job = m.jobsById[idKey]
 	if job <> invalid
@@ -120,29 +121,26 @@ sub processResponse(msg as Object)
     }
 		' could handle various error codes, retry, etc.
 		m.jobsById.delete(idKey)
-    print "response processed"
     job.context.context.response = result
     print msg.GetResponseCode()
     if msg.GetResponseCode() = 200
-      ParseResponse(result.content)
+      parseResponse(result.content)
     else
-      m.top.response= {
-        success: false
-        content: invalid
-      }
+      m.top.content = invalid
     end if
 	else
 		print "UriFetcher: event for unknown job "; idkey
 	end if
 end sub
 
-Function ParseResponse(str As String)
-  if str = invalid return invalid
+sub parseResponse(str As String)
+
+  if str = invalid return
   xml = CreateObject("roXMLElement")
   ' Return invalid if string can't be parsed
-  if not xml.Parse(str) return invalid
+  if not xml.Parse(str) return
 
-  If xml<>invalid then
+  If xml <> invalid then
     xml = xml.GetChildElements()
     responseArray = xml.GetChildElements()
   End If
@@ -199,16 +197,15 @@ Function ParseResponse(str As String)
     }
   ]
 
-  m.top.response= {
-    success: true
-    content: CreateGridContent(ParseXMLContent(list), list[0].contentList)
-  }
+  m.top.content = CreateContent(list)
 
-End Function
+end sub
 
-Function ParseXMLContent(list As Object)
+Function CreateContent(list As Object)
+  print "[CreateContent] - UriHandler.brs"
   RowItems = createObject("RoSGNode","ContentNode")
 
+  'Creates the 6 rows of content above the grid content
   for each rowAA in list
     row = createObject("RoSGNode","ContentNode")
     row.Title = rowAA.Title
@@ -221,20 +218,16 @@ Function ParseXMLContent(list As Object)
     RowItems.appendChild(row)
   end for
 
-  return RowItems
-End Function
-
-
-Function CreateGridContent(RowItems As Object, list As Object)
-  for i = 0 to list.count() step 4
+  'Create the grid content
+  for i = 0 to list[0].ContentList.count() step 4
     row = createObject("RoSGNode","ContentNode")
     if i = 0
       row.Title="THE GRID"
     end if
     for j = i to i+3
-      if list[j] <> invalid
+      if list[0].ContentList[j] <> invalid
         item = createObject("RoSGNode","ContentNode")
-        item.SetFields(list[j])
+        item.SetFields(list[0].ContentList[j])
         row.appendChild(item)
       end if
     end for
@@ -245,12 +238,12 @@ Function CreateGridContent(RowItems As Object, list As Object)
 End Function
 
 function SelectTo(array as Object, num = 25 as Integer) as Object
-   result = []
-   for each item in array
-     result.push(item)
-     if result.Count() >= num then
-       exit for
-     end if
-   end for
-  return result
+ result = []
+ for each item in array
+   result.push(item)
+   if result.Count() >= num then
+     exit for
+   end if
+ end for
+return result
 end Function

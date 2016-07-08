@@ -49,7 +49,6 @@
   </children>
 
   <interface>
-    <field id="ready" type="boolean" alias="HeroScreen.ready" />
     <field id="content" type="node" alias="HeroScreen.content" onChange="OnChangeContent" />
     <field id="rowItemSelected" type="intarray" alias="HeroScreen.rowItemSelected" alwaysNotify="true" onChange="OnRowItemSelected" />
   </interface>
