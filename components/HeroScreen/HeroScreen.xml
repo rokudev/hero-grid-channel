@@ -16,7 +16,6 @@
     <RowList
 	    id="RowList"
       focusXOffset="[165]"
-      itemComponentName="PosterItem"
       itemSize="[1920,240]"
       numRows="9"
       rowFocusAnimationStyle="FixedFocusWrap"
