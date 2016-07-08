@@ -37,7 +37,6 @@
   </children>
 
   <interface>
-    <field id="ready" type="boolean" />
     <!-- Grid Content Node -->
     <field id="content" type="node" alias="RowList.content" onChange="onContentChange"/>
 
