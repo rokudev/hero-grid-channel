@@ -1,6 +1,6 @@
 ' ********** Copyright 2016 Roku Corp.  All Rights Reserved. **********
 
-'init(): 1st function that runs on channel startup
+' 1st function that runs on channel startup
 sub init()
   'To see debug, telnet on port 8089'
   print "[HeroScene] Init"
