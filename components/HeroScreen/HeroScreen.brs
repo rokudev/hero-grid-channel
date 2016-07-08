@@ -1,5 +1,6 @@
 ' ********** Copyright 2016 Roku Corp.  All Rights Reserved. **********
 
+' Called when the HeroScreen component is initialized
 sub Init()
   ? "[HeroGrid] Init"
   m.top.setFocus(true)
