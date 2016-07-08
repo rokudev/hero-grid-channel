@@ -9,20 +9,35 @@ sub Init()
   m.background    =   m.top.findNode("Background")
 
   'Create a task node to fetch the grid content
-  m.LoadTask = CreateObject("roSGNode", "RowListContentTask")
-  m.LoadTask.control = "RUN"
-
+  m.UriHandler =   CreateObject("roSGNode", "UriHandler")
+  m.UriHandler.observeField("response", "onContentChanged")
+  'request("blargh")
+  request("http://api.delvenetworks.com/rest/organizations/59021fabe3b645968e382ac726cd6c7b/channels/1cfd09ab38e54f48be8498e0249f5c83/media.rss")
 
   'Create observer events for when content is loaded
-  m.LoadTask.observeField("content","rowListContentChanged")
+  'm.LoadTask.observeField("content","rowListContentChanged")
   m.top.observeField("visible", "onVisibleChange")
   m.top.observeField("focusedChild", "OnFocusedChildChange")
 end sub
 
-' rowListContentChanged(): observer to handle when content loads
-sub rowListContentChanged()
-  print "rowListContentChanged() - ContentReady!"
-  m.RowList.content = m.LoadTask.content
+sub request(inputURI as String)
+  context = createObject("roSGNode", "Node")
+  uri = { uri: inputURI }
+  if type(uri) = "roAssociativeArray"
+    context.addFields({
+      parameters: uri,
+      response: {}
+    })
+    m.UriHandler.request = { context: context }
+  end if
+end sub
+
+' onContentChanged(): observer to handle when content loads
+sub onContentChanged()
+  print "rowListContentChanged()!"
+  m.top.ready = m.UriHandler.response.success
+  print m.top.ready
+  m.top.content = m.UriHandler.response.content
 end sub
 
 ' set proper focus to RowList in case if return from Details Screen

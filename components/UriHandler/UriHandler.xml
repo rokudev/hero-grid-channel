@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<component name="UriHandler" extends="Task" >
+
+<interface>
+	<field id="request" type="assocarray"/>
+  <!-- Contains an AA with the content and a boolean that says whether or not it worked -->
+  <field id="response" type="assocarray"/>
+</interface>
+
+<script type="text/brightscript" uri="pkg:/components/UriHandler/UriHandler.brs"/>
+
+</component>
