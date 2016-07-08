@@ -14,7 +14,7 @@ sub Init()
   m.UriHandler.observeField("content", "onContentChanged")
 
   'request("bad request")
-  request("http://api.delvenetworks.com/rest/organizations/59021fabe3b645968e382ac726cd6c7b/channels/1cfd09ab38e54f48be8498e0249f5c83/media.rss")
+  request("http://api.delvenetworks.com/rest/organizations/59021fabe3b645968e382ac726cd6c7b/channels/1cfd09ab38e54f48be8498e0249f5c83/media.rss", 1)
 
   'Create observer events for when content is loaded
   m.top.observeField("visible", "onVisibleChange")
@@ -22,13 +22,14 @@ sub Init()
 end sub
 
 ' Issues a URL request to the UriHandler component
-sub request(inputURI as String)
+sub request(inputURI as String, feedNum as Integer)
   print "[request] - HeroScreen.brs"
   context = createObject("roSGNode", "Node")
   uri = { uri: inputURI }
   if type(uri) = "roAssociativeArray"
     context.addFields({
       parameters: uri,
+      num: feedNum,
       response: {}
     })
     m.UriHandler.request = { context: context }

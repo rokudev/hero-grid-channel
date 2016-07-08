@@ -29,6 +29,7 @@
       message="The content is not available at this time. Press option '*' to continue to a blank channel or 'home' to exit."
       visible="false" />
 
+    <!-- The spinning wheel for when content is loading -->
     <LoadingIndicator
       id="LoadingIndicator"
       imageUri="pkg:/components/LoadingIndicator/loader.png"

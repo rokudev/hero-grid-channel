@@ -11,12 +11,17 @@
 ' Description: sets the execution function for the UriFetcher
 ' 						 and tells the UriFetcher to run
 sub init()
-  ? "[init] - UriHandler.brs"
+  print "[init] - UriHandler.brs"
   ' create the message port
 	m.port = createObject("roMessagePort")
 	m.top.observeField("request", m.port)
+  m.top.observeField("cache", m.port)
 	m.top.functionName = "go"
 	m.top.control = "RUN"
+end sub
+
+sub MergeContent()
+  print "In here"
 end sub
 
 ' go(): The "Task" function.
@@ -43,7 +48,9 @@ sub go()
       print "received a request"
 			if msg.getField()="request"
 				if addRequest(msg.getData()) <> true then print "Invalid request"
-			else
+			else if msg.getField()="cache"
+        MergeContent()
+      else
 				print "UriFetcher: unrecognized field '"; msg.getField(); "'"
 			end if
     ' If a response was received
@@ -112,19 +119,21 @@ sub processResponse(msg as Object)
 	if job <> invalid
     context = job.context
     parameters = context.context.parameters
+    jobnum = job.context.context.num
     uri = parameters.uri
 		print "UriFetcher: response for transfer '"; idkey; "' for URI '"; uri; "'"
 		result = {
       code:    msg.GetResponseCode(),
       headers: msg.GetResponseHeaders(),
-      content: msg.GetString()
+      content: msg.GetString(),
+      num:     jobnum
     }
 		' could handle various error codes, retry, etc.
 		m.jobsById.delete(idKey)
     job.context.context.response = result
     print msg.GetResponseCode()
     if msg.GetResponseCode() = 200
-      parseResponse(result.content)
+      parseResponse(result.content, result.num)
     else
       m.top.content = invalid
     end if
@@ -133,46 +142,49 @@ sub processResponse(msg as Object)
 	end if
 end sub
 
-sub parseResponse(str As String)
+' Parses '
+sub parseResponse(str As String, num as Integer)
 
   if str = invalid return
   xml = CreateObject("roXMLElement")
   ' Return invalid if string can't be parsed
   if not xml.Parse(str) return
 
-  If xml <> invalid then
-    xml = xml.GetChildElements()
-    responseArray = xml.GetChildElements()
-  End If
-
-  result = []
-
-  for each xmlItem in responseArray
-    if xmlItem.getName() = "item"
-      itemAA = xmlItem.GetChildElements()
-      if itemAA <> invalid
-        item = {}
-        for each xmlItem in itemAA
-          item[xmlItem.getName()] = xmlItem.getText()
-          if xmlItem.getName() = "media:content"
-            item.stream = {url : xmlItem.url}
-            item.url = xmlItem.getAttributes().url
-            item.streamFormat = "mp4"
-
-            mediaContent = xmlItem.GetChildElements()
-            for each mediaContentItem in mediaContent
-              if mediaContentItem.getName() = "media:thumbnail"
-                item.HDPosterUrl = mediaContentItem.getattributes().url
-                item.hdBackgroundImageUrl = mediaContentItem.getattributes().url
-                item.uri = mediaContentItem.getAttributes().url
-              end if
-            end for
-          end if
-        end for
-        result.push(item)
-      end if
+  if num = 1
+    if xml <> invalid then
+      xml = xml.GetChildElements()
+      responseArray = xml.GetChildElements()
     end if
-  end for
+
+    result = []
+
+    for each xmlItem in responseArray
+      if xmlItem.getName() = "item"
+        itemAA = xmlItem.GetChildElements()
+        if itemAA <> invalid
+          item = {}
+          for each xmlItem in itemAA
+            item[xmlItem.getName()] = xmlItem.getText()
+            if xmlItem.getName() = "media:content"
+              item.stream = {url : xmlItem.url}
+              item.url = xmlItem.getAttributes().url
+              item.streamFormat = "mp4"
+
+              mediaContent = xmlItem.GetChildElements()
+              for each mediaContentItem in mediaContent
+                if mediaContentItem.getName() = "media:thumbnail"
+                  item.HDPosterUrl = mediaContentItem.getattributes().url
+                  item.hdBackgroundImageUrl = mediaContentItem.getattributes().url
+                  item.uri = mediaContentItem.getAttributes().url
+                end if
+              end for
+            end if
+          end for
+          result.push(item)
+        end if
+      end if
+    end for
+  end if
 
   list = [
     {
@@ -201,6 +213,8 @@ sub parseResponse(str As String)
 
 end sub
 
+
+'Creates the content nodes to populate the UI
 Function CreateContent(list As Object)
   print "[CreateContent] - UriHandler.brs"
   RowItems = createObject("RoSGNode","ContentNode")
@@ -237,13 +251,14 @@ Function CreateContent(list As Object)
   return RowItems
 End Function
 
+' Selects the amount of content from the feed to populate a row with
 function SelectTo(array as Object, num = 25 as Integer) as Object
- result = []
- for each item in array
+  result = []
+  for each item in array
    result.push(item)
    if result.Count() >= num then
      exit for
    end if
- end for
-return result
+  end for
+  return result
 end Function

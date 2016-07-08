@@ -6,6 +6,7 @@
 
   <children>
 
+    <!-- For transition animation -->
     <FadingBackground
       id="Background"
       width="1920"
@@ -13,6 +14,7 @@
       color="0xAAAAAA"
       ShadeOpacity="0.8" />
 
+    <!-- The main content -->
     <RowList
 	    id="RowList"
       focusXOffset="[165]"
@@ -27,6 +29,7 @@
       showRowCounter="[true,true,true,true,true,false]"
       translation="[0,155]"/>
 
+    <!-- For transition animation -->
     <Poster
       translation="[0,1000]"
       uri="pkg:/images/BG_dark_down.png"
