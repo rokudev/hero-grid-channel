@@ -24,8 +24,9 @@
     <!-- Warning if bad URL request/timeout -->
     <Dialog
       id="WarningDialog"
-      title="Content Load Timeout"
-      message="The content is not available at this time. Try again later."
+      title="Content Loading Failed"
+      optionsDialog="true"
+      message="The content is not available at this time. Press option '*' to continue to a blank channel or 'home' to exit."
       visible="false" />
 
     <LoadingIndicator
@@ -48,7 +49,8 @@
   </children>
 
   <interface>
-    <field id="gridContent" type="node" alias="HeroScreen.content" onChange="OnChangeContent" />
+    <field id="ready" type="boolean" alias="HeroScreen.ready" />
+    <field id="content" type="node" alias="HeroScreen.content" onChange="OnChangeContent" />
     <field id="rowItemSelected" type="intarray" alias="HeroScreen.rowItemSelected" alwaysNotify="true" onChange="OnRowItemSelected" />
   </interface>
 

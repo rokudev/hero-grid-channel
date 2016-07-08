@@ -24,7 +24,7 @@
       rowItemSize="[[1600,700],[375,197],[375,197],[375,526],[375,197]]"
       rowItemSpacing="[[30,0]]"
       rowLabelOffset="[[165,8]]"
-      showRowLabel="[false,false,true]"
+      showRowLabel="[false,true]"
       showRowCounter="[true,true,true,true,true,false]"
       translation="[0,155]"/>
 
@@ -37,6 +37,7 @@
   </children>
 
   <interface>
+    <field id="ready" type="boolean" />
     <!-- Grid Content Node -->
     <field id="content" type="node" alias="RowList.content" onChange="onContentChange"/>
 
