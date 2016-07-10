@@ -16,26 +16,29 @@ sub init()
 	m.port = createObject("roMessagePort")
   m.top.numRows = 4
   m.top.numRowsReceived = 0
+  m.top.contentSet = false
   m.top.observeField("request", m.port)
   m.top.observeField("numRowsReceived", m.port)
 	m.top.functionName = "go"
 	m.top.control = "RUN"
 end sub
 
+' Callback function for when content has finished parsing
 sub updateContent()
-  print "IN HERE"
-  print "NUMROWS:" + stri(m.top.numRows)
-  stop
+  print "[updateContent] - UriHandler.brs"
+  if m.top.contentSet = true return
   if m.top.numRows = m.top.numRowsReceived
     parent = createObject("roSGNode", "ContentNode")
-    parent.appendChild(m.contentCache.row0)
-    parent.appendChild(m.contentCache.row1)
-    parent.appendChild(m.contentCache.row2)
-    parent.appendChild(m.contentCache.row3)
+    for i = 0 to m.top.numRowsReceived - 1
+      contentArray = m.contentCache.getField(i.toStr())
+      for each row in contentArray
+        parent.appendChild(contentArray[row])
+      end for
+    end for
     m.top.content = parent
-    print "In here"
+    m.top.contentSet = true
   else
-    print "Not done yet"
+    print "Not all content has finished loading yet"
   end if
 end sub
 
@@ -62,12 +65,12 @@ sub go()
 		print "UriFetcher: received event type '"; mt; "'"
     ' If a request was made
 		if mt = "roSGNodeEvent"
-      print "received a request"
 			if msg.getField()="request"
+        print "received a request"
 				if addRequest(msg.getData()) <> true then print "Invalid request"
 			else if msg.getField()="numRowsReceived"
+        print "finished parsing response"
         updateContent()
-        stop
       else
 				print "UriFetcher: unrecognized field '"; msg.getField(); "'"
 			end if
@@ -223,25 +226,17 @@ sub parseResponse(str As String, num as Integer)
         ContentList : result
     }
   ]
-
-  if num = 0
-    m.contentCache.addFields({ row0: createRow(list,num) })
-  else if num = 1
-    m.contentCache.addFields({ row1: createRow(list,num) })
-  else if num = 2
-    m.contentCache.addFields({ row2: createRow(list,num) })
-  else if num = 3
-    m.contentCache.addFields({ row3: createRow(list,num) })
-  else
-    print "idk"
-  end if
+  contentAA = {}
+  contentAA[num.toStr()] = createRow(list,num)
+  m.contentCache.addFields(contentAA)
   m.top.numRowsReceived++
-  stop
   'm.top.content = CreateContent(list)
 
 end sub
 
 function createRow(list as object, num as Integer)
+  result = {}
+  if num = 3 then return createGrid(list, num)
   row = createObject("RoSGNode", "ContentNode")
   row.Title = list[num].Title
   for each itemAA in list[num].ContentList
@@ -249,16 +244,16 @@ function createRow(list as object, num as Integer)
     item.SetFields(itemAA)
     row.appendChild(item)
   end for
-  return row
+  result[num.toStr()] = row
+  return result
 end function
 
+'Create the grid content
 function createGrid(list as object, num as integer)
-  'Create the grid content
+  print "[createGrid] - UriHandler.brs"
+  result = {}
   for i = 0 to list[0].ContentList.count() step 4
     row = createObject("RoSGNode","ContentNode")
-    if i = 0
-      row.Title="THE GRID"
-    end if
     for j = i to i + 3
       if list[0].ContentList[j] <> invalid
         item = createObject("RoSGNode","ContentNode")
@@ -266,8 +261,9 @@ function createGrid(list as object, num as integer)
         row.appendChild(item)
       end if
     end for
+    result[i.toStr()] = row
   end for
-  return row
+  return result
 end function
 
 'Creates the content nodes to populate the UI
