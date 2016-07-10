@@ -14,14 +14,29 @@ sub init()
   print "[init] - UriHandler.brs"
   ' create the message port
 	m.port = createObject("roMessagePort")
-	m.top.observeField("request", m.port)
-  m.top.observeField("cache", m.port)
+  m.top.numRows = 4
+  m.top.numRowsReceived = 0
+  m.top.observeField("request", m.port)
+  m.top.observeField("numRowsReceived", m.port)
 	m.top.functionName = "go"
 	m.top.control = "RUN"
 end sub
 
-sub MergeContent()
-  print "In here"
+sub updateContent()
+  print "IN HERE"
+  print "NUMROWS:" + stri(m.top.numRows)
+  stop
+  if m.top.numRows = m.top.numRowsReceived
+    parent = createObject("roSGNode", "ContentNode")
+    parent.appendChild(m.contentCache.row0)
+    parent.appendChild(m.contentCache.row1)
+    parent.appendChild(m.contentCache.row2)
+    parent.appendChild(m.contentCache.row3)
+    m.top.content = parent
+    print "In here"
+  else
+    print "Not done yet"
+  end if
 end sub
 
 ' go(): The "Task" function.
@@ -38,6 +53,8 @@ end sub
 sub go()
   print "[go] - UriHandler.brs"
   m.jobsById = {}
+  m.contentCache = m.top.findNode("contentCache")
+
 	' UriFetcher event loop
 	while true
 		msg = wait(0, m.port)
@@ -48,8 +65,9 @@ sub go()
       print "received a request"
 			if msg.getField()="request"
 				if addRequest(msg.getData()) <> true then print "Invalid request"
-			else if msg.getField()="cache"
-        MergeContent()
+			else if msg.getField()="numRowsReceived"
+        updateContent()
+        stop
       else
 				print "UriFetcher: unrecognized field '"; msg.getField(); "'"
 			end if
@@ -142,7 +160,7 @@ sub processResponse(msg as Object)
 	end if
 end sub
 
-' Parses '
+' Parses the response string as XML'
 sub parseResponse(str As String, num as Integer)
 
   if str = invalid return
@@ -150,69 +168,107 @@ sub parseResponse(str As String, num as Integer)
   ' Return invalid if string can't be parsed
   if not xml.Parse(str) return
 
-  if num = 1
-    if xml <> invalid then
-      xml = xml.GetChildElements()
-      responseArray = xml.GetChildElements()
-    end if
-
-    result = []
-
-    for each xmlItem in responseArray
-      if xmlItem.getName() = "item"
-        itemAA = xmlItem.GetChildElements()
-        if itemAA <> invalid
-          item = {}
-          for each xmlItem in itemAA
-            item[xmlItem.getName()] = xmlItem.getText()
-            if xmlItem.getName() = "media:content"
-              item.stream = {url : xmlItem.url}
-              item.url = xmlItem.getAttributes().url
-              item.streamFormat = "mp4"
-
-              mediaContent = xmlItem.GetChildElements()
-              for each mediaContentItem in mediaContent
-                if mediaContentItem.getName() = "media:thumbnail"
-                  item.HDPosterUrl = mediaContentItem.getattributes().url
-                  item.hdBackgroundImageUrl = mediaContentItem.getattributes().url
-                  item.uri = mediaContentItem.getAttributes().url
-                end if
-              end for
-            end if
-          end for
-          result.push(item)
-        end if
-      end if
-    end for
+  if xml <> invalid then
+    xml = xml.getchildelements()
+    responsearray = xml.getchildelements()
   end if
+
+  result = []
+  'responsearray - <channel>'
+  for each xmlitem in responsearray
+    ' <title>, <link>, <description>, <pubDate>, <image>, and lots of <item>'s
+    if xmlitem.getname() = "item"
+      ' All things related to one item (title, link, description, media:content, etc.)
+      itemaa = xmlitem.getchildelements()
+      if itemaa <> invalid
+        item = {}
+        ' Get all <item> attributes
+        for each xmlitem in itemaa
+          item[xmlitem.getname()] = xmlitem.gettext()
+          if xmlitem.getname() = "media:content"
+            item.stream = {url : xmlitem.url}
+            item.url = xmlitem.getattributes().url
+            item.streamformat = "mp4"
+
+            mediacontent = xmlitem.getchildelements()
+            for each mediacontentitem in mediacontent
+              if mediacontentitem.getname() = "media:thumbnail"
+                item.hdposterurl = mediacontentitem.getattributes().url
+                item.hdbackgroundimageurl = mediacontentitem.getattributes().url
+                item.uri = mediacontentitem.getattributes().url
+              end if
+            end for
+          end if
+        end for
+        result.push(item)
+      end if
+    end if
+  end for
 
   list = [
     {
         Title:"Big Hits"
-        ContentList : SelectTo(result, 25)
+        ContentList : result
     }
     {
         Title:"Action"
-        ContentList : SelectTo(result, 9)
+        ContentList : result
     }
     {
         Title:"Drama"
-        ContentList : SelectTo(result, 25)
+        ContentList : result
     }
     {
         Title:"Explosions"
-        ContentList : SelectTo(result, 9)
-    }
-    {
-        Title:"Everybody loves Chris"
-        ContentList : SelectTo(result, 25)
+        ContentList : result
     }
   ]
 
-  m.top.content = CreateContent(list)
+  if num = 0
+    m.contentCache.addFields({ row0: createRow(list,num) })
+  else if num = 1
+    m.contentCache.addFields({ row1: createRow(list,num) })
+  else if num = 2
+    m.contentCache.addFields({ row2: createRow(list,num) })
+  else if num = 3
+    m.contentCache.addFields({ row3: createRow(list,num) })
+  else
+    print "idk"
+  end if
+  m.top.numRowsReceived++
+  stop
+  'm.top.content = CreateContent(list)
 
 end sub
 
+function createRow(list as object, num as Integer)
+  row = createObject("RoSGNode", "ContentNode")
+  row.Title = list[num].Title
+  for each itemAA in list[num].ContentList
+    item = createObject("RoSGNode","ContentNode")
+    item.SetFields(itemAA)
+    row.appendChild(item)
+  end for
+  return row
+end function
+
+function createGrid(list as object, num as integer)
+  'Create the grid content
+  for i = 0 to list[0].ContentList.count() step 4
+    row = createObject("RoSGNode","ContentNode")
+    if i = 0
+      row.Title="THE GRID"
+    end if
+    for j = i to i + 3
+      if list[0].ContentList[j] <> invalid
+        item = createObject("RoSGNode","ContentNode")
+        item.SetFields(list[0].ContentList[j])
+        row.appendChild(item)
+      end if
+    end for
+  end for
+  return row
+end function
 
 'Creates the content nodes to populate the UI
 Function CreateContent(list As Object)
@@ -229,7 +285,9 @@ Function CreateContent(list As Object)
       item.SetFields(itemAA)
       row.appendChild(item)
     end for
+
     RowItems.appendChild(row)
+
   end for
 
   'Create the grid content
@@ -238,7 +296,7 @@ Function CreateContent(list As Object)
     if i = 0
       row.Title="THE GRID"
     end if
-    for j = i to i+3
+    for j = i to i + 3
       if list[0].ContentList[j] <> invalid
         item = createObject("RoSGNode","ContentNode")
         item.SetFields(list[0].ContentList[j])
@@ -251,14 +309,10 @@ Function CreateContent(list As Object)
   return RowItems
 End Function
 
-' Selects the amount of content from the feed to populate a row with
-function SelectTo(array as Object, num = 25 as Integer) as Object
+function select(array as object, first as integer, last as integer) as object
   result = []
-  for each item in array
-   result.push(item)
-   if result.Count() >= num then
-     exit for
-   end if
+  for i = first to last
+    result.push(array[i])
   end for
   return result
-end Function
+end function

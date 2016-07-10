@@ -76,6 +76,7 @@ End Sub
 
 ' Content change handler
 Sub OnContentChange()
+  print "[OnContentChange] - DetailsScreen.brs"
   m.description.content           = m.top.content
   m.description.Description.width = "1120"
   m.videoPlayer.content           = m.top.content
@@ -87,6 +88,7 @@ End Sub
 '///////////////////////////////////////////'
 ' Helper function convert AA to Node
 Function ContentList2SimpleNode(contentList as Object, nodeType = "ContentNode" as String) as Object
+  print "[ContentList2SimpleNode] - DetailsScreen.brs"
   result = createObject("roSGNode",nodeType)
   if result <> invalid
     for each itemAA in contentList

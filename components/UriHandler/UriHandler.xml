@@ -5,12 +5,18 @@
 <interface>
   <!-- Field to issue a request to the handler -->
 	<field id="request" type="assocarray"/>
-  <!-- Holds content until all feeds are ready -->
-  <field id="cache" type="node"/>
   <!-- Contains the response content -->
   <field id="content" type="node"/>
+  <!-- The # of rows to populate -->
+  <field id="numRows" type="integer" />
+  <!-- # of rows of content received --> 
+  <field id="numRowsReceived" type="integer" />
 </interface>
 
 <script type="text/brightscript" uri="pkg:/components/UriHandler/UriHandler.brs"/>
+
+<children>
+  <ContentNode id="contentCache" />
+</children>
 
 </component>

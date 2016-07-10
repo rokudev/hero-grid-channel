@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!--********** Copyright 2016 Roku Corp.  All Rights Reserved. **********-->
 
-<!-- node that renders details screen
-    handles start of video playback -->
+<!-- node that renders details screen. handles start of video playback -->
 <component name="DetailsScreen" extends="Group" initialFocus="Buttons">
   <children>
-
 
     <!-- Background poster -->
     <Poster
@@ -21,7 +19,7 @@
       color="0x000000"
       opacity="0.8" />
 
-    <!-- Control buttons -->
+    <!-- Control buttons (Button List) -->
     <LabelList
       id="Buttons"
       translation="[1440,480]"

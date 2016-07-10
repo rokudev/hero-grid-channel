@@ -2,14 +2,16 @@
 
  'setting top interfaces
 Sub Init()
+  print "[Init] - Description.brs"
   m.top.Title             = m.top.findNode("Title")
   m.top.Description       = m.top.findNode("Description")
-  m.top.ReleaseDate       = m.top.findNode("ReleaseDate")
+  m.top.PubDate           = m.top.findNode("PubDate")
 End Sub
 
 ' Content change handler
 ' All fields population
 Sub OnContentChanged()
+  print "[OnContentChanged] - Description.brs"
   item = m.top.content
 
   title = item.title.toStr()
@@ -26,12 +28,14 @@ Sub OnContentChanged()
     end if
   end if
 
-  value = item.ReleaseDate
+  stop
+
+  value = item.pubDate
   if value <> invalid then
     if value <> ""
-      m.top.ReleaseDate.text = value.toStr()
+      m.top.PubDate.text = value.toStr()
     else
-      m.top.ReleaseDate.text = "No release date"
+      m.top.PubDate.text = "PubDate not available"
     end if
   end if
 End Sub

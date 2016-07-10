@@ -12,7 +12,7 @@
       text=""/>
 
     <Label
-      id="ReleaseDate"
+      id="PubDate"
       color="0xFFFFFF"
       text=""/>
 
@@ -38,11 +38,11 @@
     <!-- Alias to UserStarRating label -->
     <field id="UserStarRating"  type="node" alias=""/>
 
-    <!-- Alias to ReleaseDate label -->
-    <field id="ReleaseDate"     type="node" alias=""/>
+    <!-- Alias to PubDate label -->
+    <field id="PubDate"     type="node" alias=""/>
 
     <!-- Content node -->
-    <field id="Content"         type="node" onChange="OnContentChanged"/>
+    <field id="Content"     type="node" onChange="OnContentChanged"/>
   </interface>
 
   <!-- main handler -->
