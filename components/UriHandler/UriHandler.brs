@@ -16,7 +16,6 @@ sub init()
 	m.port = createObject("roMessagePort")
   m.top.numRows = 4
   m.top.numRowsReceived = 0
-  m.top.contentSet = false
   m.top.observeField("request", m.port)
   m.top.observeField("numRowsReceived", m.port)
 	m.top.functionName = "go"
@@ -26,17 +25,13 @@ end sub
 ' Callback function for when content has finished parsing
 sub updateContent()
   print "[updateContent] - UriHandler.brs"
-  if m.top.contentSet = true return
+  print "NUMBER ROWS: " + stri(m.top.numRowsReceived)
   if m.top.numRows = m.top.numRowsReceived
     parent = createObject("roSGNode", "ContentNode")
-    for i = 0 to m.top.numRowsReceived - 1
-      contentArray = m.contentCache.getField(i.toStr())
-      for each row in contentArray
-        parent.appendChild(contentArray[row])
-      end for
+    for i = 0 to m.top.numRowsReceived
+      parent.appendChild(m.contentCache.getField(i.toStr()))
     end for
     m.top.content = parent
-    m.top.contentSet = true
   else
     print "Not all content has finished loading yet"
   end if
@@ -235,7 +230,6 @@ sub parseResponse(str As String, num as Integer)
 end sub
 
 function createRow(list as object, num as Integer)
-  result = {}
   if num = 3 then return createGrid(list, num)
   row = createObject("RoSGNode", "ContentNode")
   row.Title = list[num].Title
@@ -244,16 +238,17 @@ function createRow(list as object, num as Integer)
     item.SetFields(itemAA)
     row.appendChild(item)
   end for
-  result[num.toStr()] = row
-  return result
+  return row
 end function
 
 'Create the grid content
 function createGrid(list as object, num as integer)
   print "[createGrid] - UriHandler.brs"
-  result = {}
   for i = 0 to list[0].ContentList.count() step 4
     row = createObject("RoSGNode","ContentNode")
+    if i = 0
+      row.Title="THE GRID"
+    end if
     for j = i to i + 3
       if list[0].ContentList[j] <> invalid
         item = createObject("RoSGNode","ContentNode")
@@ -261,9 +256,8 @@ function createGrid(list as object, num as integer)
         row.appendChild(item)
       end if
     end for
-    result[i.toStr()] = row
   end for
-  return result
+  return row
 end function
 
 'Creates the content nodes to populate the UI
