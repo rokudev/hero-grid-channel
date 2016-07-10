@@ -16,6 +16,7 @@ sub init()
 	m.port = createObject("roMessagePort")
   m.top.numRows = 4
   m.top.numRowsReceived = 0
+  m.top.contentSet = false
   m.top.observeField("request", m.port)
   m.top.observeField("numRowsReceived", m.port)
 	m.top.functionName = "go"
@@ -26,11 +27,20 @@ end sub
 sub updateContent()
   print "[updateContent] - UriHandler.brs"
   print "NUMBER ROWS: " + stri(m.top.numRowsReceived)
+  print m.top.contentSet
+  if m.top.contentSet = true
+    return
+  end if
   if m.top.numRows = m.top.numRowsReceived
+    print "got here"
     parent = createObject("roSGNode", "ContentNode")
-    for i = 0 to m.top.numRowsReceived
-      parent.appendChild(m.contentCache.getField(i.toStr()))
+    for i = 0 to (m.top.numRowsReceived - 1)
+      oldParent = m.contentCache.getField(i.toStr())
+      for j = 0 to (oldParent.getChildCount() - 1)
+        oldParent.getChild(0).reparent(parent,true)
+      end for
     end for
+    m.top.contentSet = true
     m.top.content = parent
   else
     print "Not all content has finished loading yet"
@@ -230,6 +240,8 @@ sub parseResponse(str As String, num as Integer)
 end sub
 
 function createRow(list as object, num as Integer)
+  print "[createRow] - UriHandler.brs"
+  Parent = createObject("RoSGNode", "ContentNode")
   if num = 3 then return createGrid(list, num)
   row = createObject("RoSGNode", "ContentNode")
   row.Title = list[num].Title
@@ -238,12 +250,14 @@ function createRow(list as object, num as Integer)
     item.SetFields(itemAA)
     row.appendChild(item)
   end for
-  return row
+  Parent.appendChild(row)
+  return Parent
 end function
 
 'Create the grid content
 function createGrid(list as object, num as integer)
   print "[createGrid] - UriHandler.brs"
+  Parent = createObject("RoSGNode","ContentNode")
   for i = 0 to list[0].ContentList.count() step 4
     row = createObject("RoSGNode","ContentNode")
     if i = 0
@@ -256,8 +270,9 @@ function createGrid(list as object, num as integer)
         row.appendChild(item)
       end if
     end for
+    Parent.appendChild(row)
   end for
-  return row
+  return Parent
 end function
 
 'Creates the content nodes to populate the UI

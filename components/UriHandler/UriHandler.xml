@@ -9,8 +9,10 @@
   <field id="content" type="node"/>
   <!-- The # of rows to populate -->
   <field id="numRows" type="integer" />
-  <!-- # of rows of content received --> 
+  <!-- # of rows of content received -->
   <field id="numRowsReceived" type="integer" />
+  <!-- variable so updateContent only runs once -->
+  <field id="contentSet" type="boolean" />
 </interface>
 
 <script type="text/brightscript" uri="pkg:/components/UriHandler/UriHandler.brs"/>
