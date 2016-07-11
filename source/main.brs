@@ -33,7 +33,7 @@ end sub
 ' Initializes the scene and shows the main homepage.
 ' Handles closing of the channel.
 sub showHeroScreen()
-  print "[showHeroScreen] - main.brs"
+  print "main.brs - [showHeroScreen]"
   screen = CreateObject("roSGScreen")
   m.port = CreateObject("roMessagePort")
   screen.setMessagePort(m.port)

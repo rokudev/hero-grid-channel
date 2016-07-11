@@ -2,7 +2,7 @@
 
 <!-- Copyright 2016 Roku Corp.  All Rights Reserved. -->
 
-<component name="HeroScreen" extends="Group" initialFocus="RowList" >
+<component name="HeroScreen" extends="Group" initialFocus="RowList">
 
   <children>
 
@@ -40,7 +40,7 @@
 
   <interface>
     <!-- Grid Content Node -->
-    <field id="content" type="node" alias="RowList.content" onChange="onContentChange"/>
+    <field id="content" type="node" alias="RowList.content" />
 
     <!-- Row item selection handler -->
     <field id="rowItemSelected" type="intarray" alias="RowList.rowItemSelected" alwaysnotify="true"/>
@@ -50,6 +50,8 @@
 
     <!-- Interface to focused item (Content Node) -->
     <field id="focusedContent"  type="node"/>
+
+    <field id="numBadRequests" type="integer" />
   </interface>
 
   <script type="text/brightscript" uri="pkg:/components/HeroScreen/HeroScreen.brs" />

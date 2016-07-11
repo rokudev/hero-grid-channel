@@ -14,7 +14,7 @@
     <!-- Overhang Node -->
     <Overhang
       showClock="true"
-      title="RokuDevExamples" />
+      title="Hero-Grid-Channel" />
 
     <!-- Details screen with play button -->
     <DetailsScreen
@@ -51,6 +51,7 @@
 
   <interface>
     <field id="content" type="node" alias="HeroScreen.content" onChange="OnChangeContent" />
+    <field id="numBadRequests" type="integer" value="0" alias="HeroScreen.numBadRequests" />
     <field id="rowItemSelected" type="intarray" alias="HeroScreen.rowItemSelected" alwaysNotify="true" onChange="OnRowItemSelected" />
   </interface>
 

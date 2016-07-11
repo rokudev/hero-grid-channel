@@ -3,7 +3,7 @@
  ' sets all observers
  ' configures buttons for Details screen
 Function Init()
-  ? "[DetailsScreen] init"
+  print "DetailsScreen.brs - [init]"
 
   m.top.observeField("visible", "onVisibleChange")
   m.top.observeField("focusedChild", "OnFocusedChildChange")
@@ -24,7 +24,7 @@ End Function
 
 ' set proper focus to buttons if Details opened and stops Video if Details closed
 Sub onVisibleChange()
-  ? "[DetailsScreen] onVisibleChange"
+  ? "DetailsScreen.brs - [onVisibleChange]"
   if m.top.visible = true then
     m.buttons.jumpToItem = 0
     m.buttons.setFocus(true)
@@ -38,6 +38,7 @@ End Sub
 
 ' set proper focus to Buttons in case if return from Video PLayer
 Sub OnFocusedChildChange()
+  print "DetailsScreen.brs - [OnFocusedChildChange]"
   if m.top.isInFocusChain() and not m.buttons.hasFocus() and not m.videoPlayer.hasFocus() then
     m.buttons.setFocus(true)
   end if
@@ -45,6 +46,7 @@ End Sub
 
 ' set proper focus on buttons and stops video if return from Playback to details
 Sub onVideoVisibleChange()
+  print "DetailsScreen.brs - [onVideoVisibleChange]"
   if m.videoPlayer.visible = false and m.top.visible = true
     m.buttons.setFocus(true)
     m.videoPlayer.control = "stop"
@@ -53,6 +55,7 @@ End Sub
 
 ' event handler of Video player msg
 Sub OnVideoPlayerStateChange()
+  print "DetailsScreen.brs - [OnVideoPlayerStateChange]"
   if m.videoPlayer.state = "error"
     ' error handling
     m.videoPlayer.visible = false
@@ -65,6 +68,7 @@ End Sub
 
 ' on Button press handler
 Sub onItemSelected()
+  print "DetailsScreen - [onItemSelected]"
   ' first button is Play
   if m.top.itemSelected = 0
     m.videoPlayer.visible = true
@@ -76,7 +80,7 @@ End Sub
 
 ' Content change handler
 Sub OnContentChange()
-  print "[OnContentChange] - DetailsScreen.brs"
+  print "DetailsScreen.brs - [OnContentChange]"
   m.description.content           = m.top.content
   m.description.Description.width = "1120"
   m.videoPlayer.content           = m.top.content
@@ -88,8 +92,8 @@ End Sub
 '///////////////////////////////////////////'
 ' Helper function convert AA to Node
 Function ContentList2SimpleNode(contentList as Object, nodeType = "ContentNode" as String) as Object
-  print "[ContentList2SimpleNode] - DetailsScreen.brs"
-  result = createObject("roSGNode",nodeType)
+  print "DetailsScreen.brs - [ContentList2SimpleNode]"
+  result = createObject("roSGNode", nodeType)
   if result <> invalid
     for each itemAA in contentList
       item = createObject("roSGNode", nodeType)

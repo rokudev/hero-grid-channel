@@ -28,7 +28,7 @@
       numRows="7"
       vertFocusAnimationStyle="floatingFocus"
       itemSpacing="[0,20]"
-      itemSize="[250, 35]" />
+      itemSize="[300, 35]" />
 
     <!-- Black hud at bottom of the Details Screen -->
     <Rectangle

@@ -3,7 +3,7 @@
 ' 1st function that runs on channel startup
 sub init()
   'To see print statements/debug info, telnet on port 8089
-  print "[init] - HeroScene.brs"
+  print "HeroScene.brs - [init]"
   ' HeroScreen Node with RowList
   m.HeroScreen = m.top.FindNode("HeroScreen")
   ' DetailsScreen Node with description & video player
@@ -12,6 +12,8 @@ sub init()
   m.LoadingIndicator = m.top.findNode("LoadingIndicator")
   ' Dialog box node. Appears if content can't be loaded
   m.WarningDialog = m.top.findNode("WarningDialog")
+
+  m.top.setFocus(true)
 end sub
 
 ' Hero Grid Content handler fucntion. If content is set, stops the
@@ -20,9 +22,14 @@ sub OnChangeContent()
   print "[OnChangeContent] - HeroScene.brs"
   m.loadingIndicator.control = "stop"
   if m.top.content <> invalid
-    m.HeroScreen.setFocus(true)
+    if m.top.numBadRequests > 0
+      m.HeroScreen.visible = "false"
+      m.WarningDialog.visible = "true"
+    end if
+    m.top.setFocus(true)
+    'm.HeroScreen.setFocus(true)
   else
-    m.WarningDialog.visible = true
+    m.WarningDialog.visible = "true"
     m.top.dialog = m.WarningDialog
     m.top.dialog.setFocus(true)
   end if
@@ -45,7 +52,12 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
   print "in HeroScene.xml onKeyEvent ";key;" "; press
   if press then
     if key = "back"
-      print "back button pressed"
+      print "[back pressed]"
+      ' if WarningDialog is open
+      if m.WarningDialog.visible = true
+        m.WarningDialog.visible = "false"
+        m.HeroScreen.setFocus(true)
+      end if
       ' if Details opened
       if m.HeroScreen.visible = false and m.DetailsScreen.videoPlayerVisible = false
         m.HeroScreen.visible = "true"
@@ -57,13 +69,16 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
         m.DetailsScreen.videoPlayerVisible = false
         result = true
       end if
+    else if key = "ok"
+      print "[ok pressed]"
+      if m.top.dialog.visible = true then m.WarningDialog.visible = "false"
     else if key = "home"
-      print "home pressed"
+      print "[home pressed]"
     end if
     else if key = "options"
-      print "options pressed"
+      print "[options pressed]"
       m.top.dialog = invalid
-      m.WarningDialog.visible = false
+      m.WarningDialog.visible = "false"
   end if
   return result
 end function

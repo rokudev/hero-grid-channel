@@ -11,7 +11,7 @@
 ' Description: sets the execution function for the UriFetcher
 ' 						 and tells the UriFetcher to run
 sub init()
-  print "[init] - UriHandler.brs"
+  print "UriHandler.brs - [init]"
   ' create the message port
 	m.port = createObject("roMessagePort")
   m.top.numRows = 4
@@ -25,14 +25,9 @@ end sub
 
 ' Callback function for when content has finished parsing
 sub updateContent()
-  print "[updateContent] - UriHandler.brs"
-  print "NUMBER ROWS: " + stri(m.top.numRowsReceived)
-  print m.top.contentSet
-  if m.top.contentSet = true
-    return
-  end if
+  print "UriHandler.brs - [updateContent]"
+  if m.top.contentSet = true then return
   if m.top.numRows = m.top.numRowsReceived
-    print "got here"
     parent = createObject("roSGNode", "ContentNode")
     for i = 0 to (m.top.numRowsReceived - 1)
       oldParent = m.contentCache.getField(i.toStr())
@@ -40,6 +35,7 @@ sub updateContent()
         oldParent.getChild(0).reparent(parent,true)
       end for
     end for
+    print "All content has finished loading"
     m.top.contentSet = true
     m.top.content = parent
   else
@@ -59,7 +55,7 @@ end sub
 '       - key: xfer
 '         val: the roUrlTransfer object
 sub go()
-  print "[go] - UriHandler.brs"
+  print "UriHandler.brs - [go]"
   m.jobsById = {}
   m.contentCache = m.top.findNode("contentCache")
 
@@ -123,7 +119,7 @@ function addRequest(request as Object) as Boolean
   		    print "UriFetcher: initiating transfer '"; idkey; "' for URI '"; uri; "'"; " succeeded: "; ok
         else
           print "UriFetcher: invalid uri: "; uri
-          m.top.content = invalid
+          m.top.numBadRequests++
   			end if
       end if
   	else
@@ -161,7 +157,8 @@ sub processResponse(msg as Object)
     if msg.GetResponseCode() = 200
       parseResponse(result.content, result.num)
     else
-      m.top.content = invalid
+      print "Status code was: " + (msg.GetResponseCode()).toStr()
+      m.top.numBadRequests++
     end if
 	else
 		print "UriFetcher: event for unknown job "; idkey
@@ -235,10 +232,9 @@ sub parseResponse(str As String, num as Integer)
   contentAA[num.toStr()] = createRow(list,num)
   m.contentCache.addFields(contentAA)
   m.top.numRowsReceived++
-  'm.top.content = CreateContent(list)
-
 end sub
 
+'Create a row of content
 function createRow(list as object, num as Integer)
   print "[createRow] - UriHandler.brs"
   Parent = createObject("RoSGNode", "ContentNode")
@@ -254,7 +250,7 @@ function createRow(list as object, num as Integer)
   return Parent
 end function
 
-'Create the grid content
+'Create a grid of content
 function createGrid(list as object, num as integer)
   print "[createGrid] - UriHandler.brs"
   Parent = createObject("RoSGNode","ContentNode")
@@ -279,22 +275,17 @@ end function
 Function CreateContent(list As Object)
   print "[CreateContent] - UriHandler.brs"
   RowItems = createObject("RoSGNode","ContentNode")
-
   'Creates the 6 rows of content above the grid content
   for each rowAA in list
     row = createObject("RoSGNode","ContentNode")
     row.Title = rowAA.Title
-
     for each itemAA in rowAA.ContentList
       item = createObject("RoSGNode","ContentNode")
       item.SetFields(itemAA)
       row.appendChild(item)
     end for
-
     RowItems.appendChild(row)
-
   end for
-
   'Create the grid content
   for i = 0 to list[0].ContentList.count() step 4
     row = createObject("RoSGNode","ContentNode")
@@ -310,7 +301,6 @@ Function CreateContent(list As Object)
     end for
     RowItems.appendChild(row)
   end for
-
   return RowItems
 End Function
 
