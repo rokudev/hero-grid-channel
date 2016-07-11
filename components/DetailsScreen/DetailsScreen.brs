@@ -68,7 +68,7 @@ End Sub
 
 ' on Button press handler
 Sub onItemSelected()
-  print "DetailsScreen - [onItemSelected]"
+  print "DetailsScreen.brs - [onItemSelected]"
   ' first button is Play
   if m.top.itemSelected = 0
     m.videoPlayer.visible = true

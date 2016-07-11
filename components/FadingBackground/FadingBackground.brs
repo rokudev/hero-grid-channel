@@ -1,6 +1,7 @@
 ' ********** Copyright 2016 Roku Corp.  All Rights Reserved. **********
 
 Sub Init()
+  print "FadingBackground.brs - [Init]"
   ' setting top interfaces
   m.backgroundColor = m.top.findNode("backgroundColor")
   m.oldBackground = m.top.findNode("oldBackground")
@@ -18,6 +19,7 @@ End Sub
 
 ' If background changes, start animation and populate fields
 Sub OnBackgroundUriChange()
+  print "FadingBackground.brs - [OnBackgroundUriChange]"
   oldUrl = m.background.uri
   m.background.uri = m.top.uri
   if oldUrl <> "" then
@@ -29,6 +31,7 @@ End Sub
 
 ' If Size changed, change parameters to childrens'
 Sub OnSizeChange()
+  print "FadingBackground.brs - [OnSizeChange]"
   size = m.top.size
 
   m.background.width = m.top.width
@@ -45,5 +48,6 @@ End Sub
 
 ' When Background image loaded, start animation
 Sub OnBackgroundLoaded()
-    m.fadeinAnimation.control = "start"
+  print "FadingBackground.brs - [OnBackgroundLoaded]"
+  m.fadeinAnimation.control = "start"
 End Sub

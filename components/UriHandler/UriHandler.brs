@@ -96,7 +96,7 @@ end sub
 '   True if request succeeds
 ' 	False if invalid request
 function addRequest(request as Object) as Boolean
-  print "[addRequest] - UriHandler.brs"
+  print "UriHandler.brs - [addRequest]"
 	' If valid request
   if type(request) = "roAssociativeArray"
     context = request.context
@@ -135,7 +135,7 @@ end function
 ' parameters:
 ' 	msg: a roUrlEvent (https://sdkdocs.roku.com/display/sdkdoc/roUrlEvent)
 sub processResponse(msg as Object)
-  print "[processResponse] - UriHandler.brs"
+  print "UriHandler.brs - [processResponse]"
 	idKey = stri(msg.GetSourceIdentity()).trim()
 	job = m.jobsById[idKey]
 	if job <> invalid
@@ -167,7 +167,7 @@ end sub
 
 ' Parses the response string as XML'
 sub parseResponse(str As String, num as Integer)
-
+  print "UriHandler.brs - [parseResponse]"
   if str = invalid return
   xml = CreateObject("roXMLElement")
   ' Return invalid if string can't be parsed
@@ -236,7 +236,7 @@ end sub
 
 'Create a row of content
 function createRow(list as object, num as Integer)
-  print "[createRow] - UriHandler.brs"
+  print "UriHandler.brs - [createRow]"
   Parent = createObject("RoSGNode", "ContentNode")
   if num = 3 then return createGrid(list, num)
   row = createObject("RoSGNode", "ContentNode")
@@ -252,7 +252,7 @@ end function
 
 'Create a grid of content
 function createGrid(list as object, num as integer)
-  print "[createGrid] - UriHandler.brs"
+  print "UriHandler.brs - [createGrid]"
   Parent = createObject("RoSGNode","ContentNode")
   for i = 0 to list[0].ContentList.count() step 4
     row = createObject("RoSGNode","ContentNode")
@@ -273,7 +273,7 @@ end function
 
 'Creates the content nodes to populate the UI
 Function CreateContent(list As Object)
-  print "[CreateContent] - UriHandler.brs"
+  print "UriHandler.brs - [CreateContent]"
   RowItems = createObject("RoSGNode","ContentNode")
   'Creates the 6 rows of content above the grid content
   for each rowAA in list
@@ -305,6 +305,7 @@ Function CreateContent(list As Object)
 End Function
 
 function select(array as object, first as integer, last as integer) as object
+  print "UriHandler.brs - [select]"
   result = []
   for i = first to last
     result.push(array[i])

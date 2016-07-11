@@ -25,7 +25,6 @@
     <Dialog
       id="WarningDialog"
       title="Content Loading Failed"
-      optionsDialog="true"
       message="The content is not available at this time. Press option '*' to continue to a blank channel or 'home' to exit."
       visible="false" />
 
