@@ -243,7 +243,7 @@ function createRow(list as object, num as Integer)
   row.Title = list[num].Title
   for each itemAA in list[num].ContentList
     item = createObject("RoSGNode","ContentNode")
-    item.SetFields(itemAA)
+    item.AddFields(itemAA)
     row.appendChild(item)
   end for
   Parent.appendChild(row)
@@ -262,7 +262,7 @@ function createGrid(list as object, num as integer)
     for j = i to i + 3
       if list[0].ContentList[j] <> invalid
         item = createObject("RoSGNode","ContentNode")
-        item.SetFields(list[0].ContentList[j])
+        item.AddFields(list[0].ContentList[j])
         row.appendChild(item)
       end if
     end for
@@ -281,7 +281,7 @@ Function CreateContent(list As Object)
     row.Title = rowAA.Title
     for each itemAA in rowAA.ContentList
       item = createObject("RoSGNode","ContentNode")
-      item.SetFields(itemAA)
+      item.AddFields(itemAA)
       row.appendChild(item)
     end for
     RowItems.appendChild(row)
@@ -295,7 +295,7 @@ Function CreateContent(list As Object)
     for j = i to i + 3
       if list[0].ContentList[j] <> invalid
         item = createObject("RoSGNode","ContentNode")
-        item.SetFields(list[0].ContentList[j])
+        item.AddFields(list[0].ContentList[j])
         row.appendChild(item)
       end if
     end for

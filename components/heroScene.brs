@@ -3,7 +3,7 @@
 ' 1st function that runs on channel startup
 sub init()
   'To see print statements/debug info, telnet on port 8089
-  print "HeroScene.brs - [init]"
+  'print "HeroScene.brs - [init]"
   ' HeroScreen Node with RowList
   m.HeroScreen = m.top.FindNode("HeroScreen")
   ' DetailsScreen Node with description & video player
@@ -19,7 +19,7 @@ end sub
 ' Hero Grid Content handler fucntion. If content is set, stops the
 ' loadingIndicator and focuses on GridScreen.
 sub OnChangeContent()
-  print "HeroScene.brs - [OnChangeContent]"
+  'print "HeroScene.brs - [OnChangeContent]"
   m.loadingIndicator.control = "stop"
   if m.top.content <> invalid
     if m.top.numBadRequests > 0
@@ -35,7 +35,7 @@ end sub
 ' Row item selected handler function.
 ' On select any item on home scene, show Details node and hide Grid.
 sub OnRowItemSelected()
-  print "HeroScene.brs - [OnRowItemSelected]"
+  'print "HeroScene.brs - [OnRowItemSelected]"
   m.HeroScreen.visible = "false"
   m.DetailsScreen.content = m.HeroScreen.focusedContent
   m.DetailsScreen.setFocus(true)

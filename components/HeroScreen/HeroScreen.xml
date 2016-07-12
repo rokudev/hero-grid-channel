@@ -17,6 +17,7 @@
     <!-- The main content -->
     <RowList
 	    id="RowList"
+      itemComponentName="customItem"
       focusXOffset="[165]"
       itemSize="[1920,220]"
       numRows="9"

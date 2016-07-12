@@ -2,7 +2,7 @@
 
 ' Called when the HeroScreen component is initialized
 sub Init()
-  print "HeroScreen.brs - [init]"
+  'print "HeroScreen.brs - [init]"
 
   'Get references to child nodes
   m.RowList       =   m.top.findNode("RowList")
@@ -25,7 +25,7 @@ end sub
 
 ' Issues a URL request to the UriHandler component
 sub request(inputURI as String, feedNum as Integer)
-  print "HeroScreen.brs - [request]"
+  'print "HeroScreen.brs - [request]"
   context = createObject("roSGNode", "Node")
   uri = { uri: inputURI }
   if type(uri) = "roAssociativeArray"

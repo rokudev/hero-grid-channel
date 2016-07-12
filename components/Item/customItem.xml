@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!-- Copyright 2016 Roku Corp.  All Rights Reserved. -->
+
+<component name="customItem" extends="Group">
+    <interface>
+        <field id="width"       type="float" onChange="updateLayout"/>
+        <field id="height"      type="float" onChange="updateLayout"/>
+        <field id="itemContent" type="node" onChange="itemContentChanged" />
+    </interface>
+
+    <script type="text/brightscript">
+      <![CDATA[
+        Sub Init()
+          m.Poster = m.top.findNode("poster")
+        End Sub
+
+        Sub itemContentChanged()
+          updateLayout()
+          m.poster.uri = m.top.itemContent.HDPOSTERURL
+        End Sub
+
+        Sub updateLayout()
+          If m.top.height > 0 And m.top.width > 0 Then
+            m.Poster.width  = m.top.width
+            m.Poster.height = m.top.height
+            if m.top.height < 400 and m.top.width < 400
+              m.Poster.loadWidth = m.top.width - 100
+              m.Poster.loadHeight = m.top.height - 100
+            end if
+          End If
+        End Sub
+              ]]>
+    </script>
+
+    <children>
+        <Poster id="poster" />
+    </children>
+</component>
