@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!--********** Copyright 2016 Roku Corp.  All Rights Reserved. **********-->
 
-<!--
-    node - description of the content item
-    -->
+<!-- node - description of the content item -->
 <component name="Description" extends="LayoutGroup">
   <children>
     <Label
@@ -25,6 +23,7 @@
       lineSpacing="7"
       text=""/>
   </children>
+
   <interface>
     <!-- Alias to Title label -->
     <field id="Title"           type="node" alias=""/>

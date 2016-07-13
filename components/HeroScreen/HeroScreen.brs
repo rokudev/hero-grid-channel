@@ -13,6 +13,7 @@ sub Init()
   m.UriHandler.observeField("content", "onContentChanged")
 
   'Make a request for each "row" in the UI
+  'request("bad request", 4)
   request("http://api.delvenetworks.com/rest/organizations/59021fabe3b645968e382ac726cd6c7b/channels/1cfd09ab38e54f48be8498e0249f5c83/media.rss", 0)
   request("http://api.delvenetworks.com/rest/organizations/59021fabe3b645968e382ac726cd6c7b/channels/5a438a6cfe68407684832d54c4b58cbb/media.rss", 1)
   request("http://api.delvenetworks.com/rest/organizations/59021fabe3b645968e382ac726cd6c7b/channels/4cd8f3ec67c64c16b8f3bf87339503dd/media.rss", 2)
@@ -64,7 +65,7 @@ end sub
 
 ' sets proper focus to RowList in case channel returns from Details Screen
 sub onVisibleChange()
-  print "HeroScreen.brs - [onVisibleChange]"
+  'print "HeroScreen.brs - [onVisibleChange]"
   if m.top.visible = true then
     m.rowList.setFocus(true)
   end if
@@ -72,7 +73,7 @@ end sub
 
 ' set proper focus to RowList in case if return from Details Screen
 Sub onFocusedChildChange()
-  print "HeroScreen.brs - [onFocusedChildChange]"
+  'print "HeroScreen.brs - [onFocusedChildChange]"
   if m.top.isInFocusChain() and not m.rowList.hasFocus() then
     m.rowList.setFocus(true)
   end if

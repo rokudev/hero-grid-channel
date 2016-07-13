@@ -1,3 +1,5 @@
+' ********** Copyright 2016 Roku Corp.  All Rights Reserved. **********
+
 sub init()
   print "LoadingIndicator.brs - [init]"
   m.image = m.top.findNode("image")

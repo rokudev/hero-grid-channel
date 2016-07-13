@@ -1,4 +1,5 @@
 ' ********** Copyright 2016 Roku Corp.  All Rights Reserved. **********
+
  ' inits details screen
  ' sets all observers
  ' configures buttons for Details screen

@@ -3,6 +3,7 @@
 <!-- Copyright 2016 Roku Corp.  All Rights Reserved. -->
 
 <component name="customItem" extends="Group">
+
   <interface>
     <field id="width"       type="float" onChange="updateLayout"/>
     <field id="height"      type="float" onChange="updateLayout"/>
@@ -37,4 +38,5 @@
   <children>
       <Poster id="poster" />
   </children>
+  
 </component>

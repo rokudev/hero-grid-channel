@@ -34,6 +34,8 @@ end sub
 ' Callback function for when content has finished parsing
 sub updateContent()
   print "UriHandler.brs - [updateContent]"
+  
+  ' Return if the content is already set
   if m.top.contentSet = true then return
   ' Set the UI if all content from all streams are ready
   ' Note: this technique is hindered by slowest request
@@ -60,6 +62,8 @@ end sub
 sub checkContent()
   if m.top.numRowsReceived <> m.top.numRows
     print "not all content done"
+  else
+    print "all content done"
   end if
 end sub
 
@@ -179,7 +183,7 @@ sub processResponse(msg as Object)
       content: msg.GetString(),
       num:     jobnum
     }
-		' could handle various error codes, retry, etc.
+		' could handle various error codes, retry, etc. here
 		m.jobsById.delete(idKey)
     job.context.context.response = result
     if msg.GetResponseCode() = 200
@@ -326,6 +330,7 @@ end function
 
 ' Helper function to add and set fields of a content node
 function AddAndSetFields(node as object, aa as object)
+  print "UriHandler.brs - [AddAndSetFields]"
   addFields = {}
   setFields = {}
   for each field in aa
