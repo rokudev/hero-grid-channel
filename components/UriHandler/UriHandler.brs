@@ -31,9 +31,15 @@ sub updateContent()
     parent = createObject("roSGNode", "ContentNode")
     for i = 0 to (m.top.numRowsReceived - 1)
       oldParent = m.contentCache.getField(i.toStr())
-      for j = 0 to (oldParent.getChildCount() - 1)
-        oldParent.getChild(0).reparent(parent,true)
-      end for
+      if oldParent <> invalid
+        for j = 0 to (oldParent.getChildCount() - 1)
+          oldParent.getChild(0).reparent(parent,true)
+        end for
+      else
+        fakeRow = createObject("roSGNode", "ContentNode")
+        fakeItem = createObject("roSGNode", "ContentNode")
+        parent.appendChild(fakeParent)
+      end if
     end for
     print "All content has finished loading"
     m.top.contentSet = true
@@ -270,39 +276,6 @@ function createGrid(list as object, num as integer)
   end for
   return Parent
 end function
-
-'Creates the content nodes to populate the UI
-Function CreateContent(list As Object)
-  print "UriHandler.brs - [CreateContent]"
-  RowItems = createObject("RoSGNode","ContentNode")
-  'Creates the 6 rows of content above the grid content
-  for each rowAA in list
-    row = createObject("RoSGNode","ContentNode")
-    row.Title = rowAA.Title
-    for each itemAA in rowAA.ContentList
-      item = createObject("RoSGNode","ContentNode")
-      item.AddFields(itemAA)
-      row.appendChild(item)
-    end for
-    RowItems.appendChild(row)
-  end for
-  'Create the grid content
-  for i = 0 to list[0].ContentList.count() step 4
-    row = createObject("RoSGNode","ContentNode")
-    if i = 0
-      row.Title="THE GRID"
-    end if
-    for j = i to i + 3
-      if list[0].ContentList[j] <> invalid
-        item = createObject("RoSGNode","ContentNode")
-        item.AddFields(list[0].ContentList[j])
-        row.appendChild(item)
-      end if
-    end for
-    RowItems.appendChild(row)
-  end for
-  return RowItems
-End Function
 
 function select(array as object, first as integer, last as integer) as object
   print "UriHandler.brs - [select]"
