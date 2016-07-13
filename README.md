@@ -10,7 +10,6 @@ Hero Tile Sample Channel for the Roku Platform
 ## Channel Structure 
 - Components: The Scene Graph components 
 - Images: Contains image assets used in the channel
-- Out: Contains the zip package that side-loads on the Roku device
 - Source: Contains the main brightscript file that runs right when the channel starts
 
 ### To-do (Features that still need to be implemented)
