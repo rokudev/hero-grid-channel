@@ -52,4 +52,3 @@ If so, try the feed request again
 
 ### Known issues
 - The content may take a while to load (i.e. the loading wheel will be active for a long time) since the HTTP requests are asynchronous and the content is only loaded after all requests have their corresponding responses parsed for content. This is an issue with network latency and async requests. One way to mitigate this issue is to load content whenever you receive a response. However, the implementation is a bit tricky since the content may load in a different order than intended.
-
