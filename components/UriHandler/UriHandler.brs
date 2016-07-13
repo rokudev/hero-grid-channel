@@ -38,7 +38,8 @@ sub updateContent()
       else
         fakeRow = createObject("roSGNode", "ContentNode")
         fakeItem = createObject("roSGNode", "ContentNode")
-        parent.appendChild(fakeParent)
+        fakeRow.appendChild(fakeItem)
+        parent.appendChild(fakeRow)
       end if
     end for
     print "All content has finished loading"
@@ -46,6 +47,12 @@ sub updateContent()
     m.top.content = parent
   else
     print "Not all content has finished loading yet"
+  end if
+end sub
+
+sub checkContent()
+  if m.top.numRowsReceived <> m.top.numRows
+    print "not all content done"
   end if
 end sub
 
@@ -63,6 +70,10 @@ end sub
 sub go()
   print "UriHandler.brs - [go]"
   m.jobsById = {}
+  m.timer = createObject("roSGNode","Timer")
+  m.timer.duration = 4
+  m.timer.control = "start"
+  m.timer.observeField("fire", "checkContent")
   m.contentCache = m.top.findNode("contentCache")
 
 	' UriFetcher event loop
@@ -234,22 +245,33 @@ sub parseResponse(str As String, num as Integer)
         ContentList : result
     }
   ]
+
   contentAA = {}
-  contentAA[num.toStr()] = createRow(list,num)
-  m.contentCache.addFields(contentAA)
-  m.top.numRowsReceived++
+  content = invalid
+  if num = 3
+    content = createGrid(result)
+  else
+    content = createRow(list, num)
+  end if
+
+  if content <> invalid
+    contentAA[num.toStr()] = content
+    m.contentCache.addFields(contentAA)
+    m.top.numRowsReceived++
+  else
+    print "invalid content!"
+  end if
 end sub
 
 'Create a row of content
 function createRow(list as object, num as Integer)
   print "UriHandler.brs - [createRow]"
   Parent = createObject("RoSGNode", "ContentNode")
-  if num = 3 then return createGrid(list, num)
   row = createObject("RoSGNode", "ContentNode")
   row.Title = list[num].Title
   for each itemAA in list[num].ContentList
     item = createObject("RoSGNode","ContentNode")
-    item.AddFields(itemAA)
+    AddAndSetFields(item, itemAA)
     row.appendChild(item)
   end for
   Parent.appendChild(row)
@@ -257,18 +279,18 @@ function createRow(list as object, num as Integer)
 end function
 
 'Create a grid of content
-function createGrid(list as object, num as integer)
+function createGrid(list as object)
   print "UriHandler.brs - [createGrid]"
   Parent = createObject("RoSGNode","ContentNode")
-  for i = 0 to list[0].ContentList.count() step 4
+  for i = 0 to list.count() step 4
     row = createObject("RoSGNode","ContentNode")
     if i = 0
-      row.Title="THE GRID"
+      row.Title = "THE GRID"
     end if
     for j = i to i + 3
-      if list[0].ContentList[j] <> invalid
+      if list[j] <> invalid
         item = createObject("RoSGNode","ContentNode")
-        item.AddFields(list[0].ContentList[j])
+        AddAndSetFields(item,list[j])
         row.appendChild(item)
       end if
     end for
@@ -277,6 +299,7 @@ function createGrid(list as object, num as integer)
   return Parent
 end function
 
+' Helper function to select only a certain range of content
 function select(array as object, first as integer, last as integer) as object
   print "UriHandler.brs - [select]"
   result = []
@@ -284,4 +307,19 @@ function select(array as object, first as integer, last as integer) as object
     result.push(array[i])
   end for
   return result
+end function
+
+' Helper function to add and set fields of a content node
+function AddAndSetFields(node as object, aa as object)
+  addFields = {}
+  setFields = {}
+  for each field in aa
+    if node.hasField(field)
+      setFields[field] = aa[field]
+    else
+      addFields[field] = aa[field]
+    end if
+  end for
+  node.setFields(setFields)
+  node.addFields(addFields)
 end function
