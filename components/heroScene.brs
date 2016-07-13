@@ -22,10 +22,14 @@ sub OnChangeContent()
   'print "HeroScene.brs - [OnChangeContent]"
   m.loadingIndicator.control = "stop"
   if m.top.content <> invalid
+    'Warn the user if there was a bad request
     if m.top.numBadRequests > 0
       m.HeroScreen.visible = "true"
       m.WarningDialog.visible = "true"
       m.WarningDialog.message = (m.top.numBadRequests).toStr() + " request(s) for content failed. Press '*' to try to request content again or OK or '<-' to continue."
+    else
+      m.HeroScreen.visible = "true"
+      m.HeroScreen.setFocus(true)
     end if
   else
     m.WarningDialog.visible = "true"
