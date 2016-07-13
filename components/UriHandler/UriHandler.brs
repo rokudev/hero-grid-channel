@@ -12,13 +12,21 @@
 ' 						 and tells the UriFetcher to run
 sub init()
   print "UriHandler.brs - [init]"
+
   ' create the message port
 	m.port = createObject("roMessagePort")
+
+  ' fields for checking if content has been loaded
+  ' each row is assumed to be a different request for a rss feed
   m.top.numRows = 4
   m.top.numRowsReceived = 0
   m.top.contentSet = false
+
+  ' setting callbacks for url request and response
   m.top.observeField("request", m.port)
   m.top.observeField("numRowsReceived", m.port)
+
+  ' setting the task thread function
 	m.top.functionName = "go"
 	m.top.control = "RUN"
 end sub
@@ -27,6 +35,9 @@ end sub
 sub updateContent()
   print "UriHandler.brs - [updateContent]"
   if m.top.contentSet = true then return
+  ' Set the UI if all content from all streams are ready
+  ' Note: this technique is hindered by slowest request
+  ' Try to think of a better asynchronous method here!
   if m.top.numRows = m.top.numRowsReceived
     parent = createObject("roSGNode", "ContentNode")
     for i = 0 to (m.top.numRowsReceived - 1)
@@ -35,11 +46,6 @@ sub updateContent()
         for j = 0 to (oldParent.getChildCount() - 1)
           oldParent.getChild(0).reparent(parent,true)
         end for
-      else
-        fakeRow = createObject("roSGNode", "ContentNode")
-        fakeItem = createObject("roSGNode", "ContentNode")
-        fakeRow.appendChild(fakeItem)
-        parent.appendChild(fakeRow)
       end if
     end for
     print "All content has finished loading"
@@ -50,6 +56,7 @@ sub updateContent()
   end if
 end sub
 
+' Timer callback function - runs in the render thread
 sub checkContent()
   if m.top.numRowsReceived <> m.top.numRows
     print "not all content done"
@@ -69,11 +76,16 @@ end sub
 '         val: the roUrlTransfer object
 sub go()
   print "UriHandler.brs - [go]"
+  'Holds requests by id
   m.jobsById = {}
+
+  ' For displaying a dialog to the user after 4 seconds if content not ready
   m.timer = createObject("roSGNode","Timer")
   m.timer.duration = 4
   m.timer.control = "start"
   m.timer.observeField("fire", "checkContent")
+
+  ' Stores the content if not all requests are ready
   m.contentCache = m.top.findNode("contentCache")
 
 	' UriFetcher event loop
@@ -170,11 +182,10 @@ sub processResponse(msg as Object)
 		' could handle various error codes, retry, etc.
 		m.jobsById.delete(idKey)
     job.context.context.response = result
-    print msg.GetResponseCode()
     if msg.GetResponseCode() = 200
       parseResponse(result.content, result.num)
     else
-      print "Status code was: " + (msg.GetResponseCode()).toStr()
+      print "Error status code was: " + (msg.GetResponseCode()).toStr()
       m.top.numBadRequests++
     end if
 	else
@@ -182,9 +193,11 @@ sub processResponse(msg as Object)
 	end if
 end sub
 
-' Parses the response string as XML'
+' Parses the response string as XML
+' The parsing logic will be different for different RSS feeds
 sub parseResponse(str As String, num as Integer)
   print "UriHandler.brs - [parseResponse]"
+
   if str = invalid return
   xml = CreateObject("roXMLElement")
   ' Return invalid if string can't be parsed
@@ -227,6 +240,7 @@ sub parseResponse(str As String, num as Integer)
     end if
   end for
 
+  'For the 3 rows before the "grid"
   list = [
     {
         Title:"Big Hits"
@@ -240,12 +254,9 @@ sub parseResponse(str As String, num as Integer)
         Title:"Drama"
         ContentList : result
     }
-    {
-        Title:"Explosions"
-        ContentList : result
-    }
   ]
 
+  'Logic for creating a "row" vs. a "grid"
   contentAA = {}
   content = invalid
   if num = 3
@@ -254,6 +265,7 @@ sub parseResponse(str As String, num as Integer)
     content = createRow(list, num)
   end if
 
+  'Add the newly parsed content row/grid to the cache until everything is ready
   if content <> invalid
     contentAA[num.toStr()] = content
     m.contentCache.addFields(contentAA)
@@ -278,7 +290,10 @@ function createRow(list as object, num as Integer)
   return Parent
 end function
 
-'Create a grid of content
+'Create a grid of content - simple splitting of a feed to different rows
+'with the title of the row hidden.
+'Set the for loop parameters to adjust how many columns there
+'should be in the grid.
 function createGrid(list as object)
   print "UriHandler.brs - [createGrid]"
   Parent = createObject("RoSGNode","ContentNode")
@@ -299,7 +314,7 @@ function createGrid(list as object)
   return Parent
 end function
 
-' Helper function to select only a certain range of content
+' Helper function to select only a certain range of content'
 function select(array as object, first as integer, last as integer) as object
   print "UriHandler.brs - [select]"
   result = []

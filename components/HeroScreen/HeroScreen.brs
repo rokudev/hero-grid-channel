@@ -12,7 +12,7 @@ sub Init()
   m.UriHandler    =   CreateObject("roSGNode", "UriHandler")
   m.UriHandler.observeField("content", "onContentChanged")
 
-  request("bad request", 5)
+  'Make a request for each "row" in the UI
   request("http://api.delvenetworks.com/rest/organizations/59021fabe3b645968e382ac726cd6c7b/channels/1cfd09ab38e54f48be8498e0249f5c83/media.rss", 0)
   request("http://api.delvenetworks.com/rest/organizations/59021fabe3b645968e382ac726cd6c7b/channels/5a438a6cfe68407684832d54c4b58cbb/media.rss", 1)
   request("http://api.delvenetworks.com/rest/organizations/59021fabe3b645968e382ac726cd6c7b/channels/4cd8f3ec67c64c16b8f3bf87339503dd/media.rss", 2)
@@ -40,14 +40,14 @@ end sub
 
 ' observer function to handle when content loads
 sub onContentChanged()
-  print "HeroScreen.brs - [onContentChanged]"
+  'print "HeroScreen.brs - [onContentChanged]"
   m.top.numBadRequests = m.UriHandler.numBadRequests
   m.top.content = m.UriHandler.content
 end sub
 
 ' handler of focused item in RowList
 sub OnItemFocused()
-  print "HeroScreen.brs - [onItemFocused]"
+  'print "HeroScreen.brs - [onItemFocused]"
   itemFocused = m.top.itemFocused
 
   'When an item gains the key focus, set to a 2-element array,

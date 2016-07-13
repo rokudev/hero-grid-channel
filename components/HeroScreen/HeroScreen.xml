@@ -52,7 +52,8 @@
     <!-- Interface to focused item (Content Node) -->
     <field id="focusedContent"  type="node"/>
 
-    <field id="numBadRequests" type="integer" />
+    <!-- # of requests that have bad/no content (not a 200 response) -->
+    <field id="numBadRequests" type="integer"/>
   </interface>
 
   <script type="text/brightscript" uri="pkg:/components/HeroScreen/HeroScreen.brs" />
