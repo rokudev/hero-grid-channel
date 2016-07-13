@@ -11,25 +11,26 @@
 
     <script type="text/brightscript">
       <![CDATA[
-        Sub Init()
+        sub Init()
           m.Poster = m.top.findNode("poster")
-        End Sub
+        end sub
 
-        Sub itemContentChanged()
+        sub itemContentChanged()
+          m.Poster.loadDisplayMode = "scaleToZoom"
+          if m.top.height < 400 and m.top.width < 400
+            m.Poster.loadWidth = 300
+            m.Poster.loadHeight = 150
+          end if
           updateLayout()
-          m.poster.uri = m.top.itemContent.HDPOSTERURL
-        End Sub
+          m.Poster.uri = m.top.itemContent.HDPOSTERURL
+        end sub
 
-        Sub updateLayout()
-          If m.top.height > 0 And m.top.width > 0 Then
+        sub updateLayout()
+          if m.top.height > 0 And m.top.width > 0 then
             m.Poster.width  = m.top.width
             m.Poster.height = m.top.height
-            if m.top.height < 400 and m.top.width < 400
-              m.Poster.loadWidth = m.top.width - 100
-              m.Poster.loadHeight = m.top.height - 100
-            end if
-          End If
-        End Sub
+          end if
+        end sub
               ]]>
     </script>
 
