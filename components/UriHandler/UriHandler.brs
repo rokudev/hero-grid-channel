@@ -201,6 +201,7 @@ end sub
 ' The parsing logic will be different for different RSS feeds
 sub parseResponse(str As String, num as Integer)
   print "UriHandler.brs - [parseResponse]"
+
   if str = invalid return
   xml = CreateObject("roXMLElement")
   ' Return invalid if string can't be parsed
@@ -317,7 +318,7 @@ function createGrid(list as object)
   return Parent
 end function
 
-' Helper function to select only a certain range of content
+' Helper function to select only a certain range of content'
 function select(array as object, first as integer, last as integer) as object
   print "UriHandler.brs - [select]"
   result = []
