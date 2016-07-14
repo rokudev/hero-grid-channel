@@ -201,7 +201,6 @@ end sub
 ' The parsing logic will be different for different RSS feeds
 sub parseResponse(str As String, num as Integer)
   print "UriHandler.brs - [parseResponse]"
-
   if str = invalid return
   xml = CreateObject("roXMLElement")
   ' Return invalid if string can't be parsed
