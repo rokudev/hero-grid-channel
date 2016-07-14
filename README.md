@@ -3,6 +3,10 @@
 
 Hero Tile Sample Channel for the Roku Platform
 
+## How to run this sample
+- Zip up the entire project directory and follow the developer set-up guide here: https://blog.roku.com/developer/2016/02/04/developer-setup-guide/
+- Alternatively, open up this project in Eclipse or Atom and use the corresponding plugin/package to export/deploy the channel.
+
 ## Features
 - Showcases a Hulu-like UI, varying the display of content by manipulating the built-in Scene Graph component
   - Includes a (1) hero sized row, (2) normal row, (3) movie poster row, and (4) a grid row of content.
@@ -39,9 +43,12 @@ sees as a result.
 - Event: User presses the back button on the video
 - User: Sees the details screen.
 
-### To-do (Features that still need to be implemented)
+### Features that still need to be implemented
 - [ ] Proper warning dialogs to notify users of failures
 - [ ] Possible warning: after 3 seconds, show dialog asking user if he/she wants the content from that feed -- if not, load the feed.
 If so, try the feed request again
 - [ ] Guide/Blog post showing how to use the sample channel / next steps
 - [ ] Discuss deep linking next steps
+
+### Known issues
+- The content may take a while to load (i.e. the loading wheel will be active for a long time) since the HTTP requests are asynchronous and the content is only loaded after all requests have their corresponding responses parsed for content. This is an issue with network latency and async requests. One way to mitigate this issue is to load content whenever you receive a response. However, the implementation is a bit tricky since the content may load in a different order than intended.

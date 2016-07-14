@@ -1,6 +1,6 @@
 ' ********** Copyright 2016 Roku Corp.  All Rights Reserved. **********
 
-' 1st function that runs on channel startup
+' 1st function that runs for the scene on channel startup
 sub init()
   'To see print statements/debug info, telnet on port 8089
   'print "HeroScene.brs - [init]"

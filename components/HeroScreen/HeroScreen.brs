@@ -2,6 +2,7 @@
 
 ' Called when the HeroScreen component is initialized
 sub Init()
+  'Uncomment the print statements to see where and when the functions are called
   'print "HeroScreen.brs - [init]"
 
   'Get references to child nodes
@@ -13,6 +14,7 @@ sub Init()
   m.UriHandler.observeField("content", "onContentChanged")
 
   'Make a request for each "row" in the UI
+  ' Uncomment this line to simulate a bad request and make the dialog box appear
   'request("bad request", 4)
   request("http://api.delvenetworks.com/rest/organizations/59021fabe3b645968e382ac726cd6c7b/channels/1cfd09ab38e54f48be8498e0249f5c83/media.rss", 0)
   request("http://api.delvenetworks.com/rest/organizations/59021fabe3b645968e382ac726cd6c7b/channels/5a438a6cfe68407684832d54c4b58cbb/media.rss", 1)
