@@ -317,7 +317,7 @@ function createGrid(list as object)
   return Parent
 end function
 
-' Helper function to select only a certain range of content'
+' Helper function to select only a certain range of content
 function select(array as object, first as integer, last as integer) as object
   print "UriHandler.brs - [select]"
   result = []
