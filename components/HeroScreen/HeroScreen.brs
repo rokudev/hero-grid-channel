@@ -68,15 +68,11 @@ end sub
 ' sets proper focus to RowList in case channel returns from Details Screen
 sub onVisibleChange()
   'print "HeroScreen.brs - [onVisibleChange]"
-  if m.top.visible = true then
-    m.rowList.setFocus(true)
-  end if
+  if m.top.visible then m.rowList.setFocus(true)
 end sub
 
 ' set proper focus to RowList in case if return from Details Screen
 Sub onFocusedChildChange()
   'print "HeroScreen.brs - [onFocusedChildChange]"
-  if m.top.isInFocusChain() and not m.rowList.hasFocus() then
-    m.rowList.setFocus(true)
-  end if
+  if m.top.isInFocusChain() and not m.rowList.hasFocus() then m.rowList.setFocus(true)
 End Sub
