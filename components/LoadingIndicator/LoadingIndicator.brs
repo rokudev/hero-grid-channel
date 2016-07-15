@@ -22,7 +22,7 @@ sub init()
 end sub
 
 sub updateLayout()
-  print "loadingIndicator.brs - [updateLayout]"
+  print "LoadingIndicator.brs - [updateLayout]"
   ' check for parent node and set observers
   if m.top.getParent() <> invalid
       m.top.getParent().observeField("width", "updateLayout")

@@ -36,7 +36,7 @@ sub updateContent()
   print "UriHandler.brs - [updateContent]"
 
   ' Return if the content is already set
-  if m.top.contentSet = true then return
+  if m.top.contentSet return
   ' Set the UI if all content from all streams are ready
   ' Note: this technique is hindered by slowest request
   ' Try to think of a better asynchronous method here!
@@ -86,37 +86,35 @@ sub go()
   ' For displaying a dialog to the user after 4 seconds if content not ready
   m.timer = createObject("roSGNode","Timer")
   m.timer.duration = 4
-  m.timer.control = "start"
   m.timer.observeField("fire", "checkContent")
+  m.timer.control = "start"
 
   ' Stores the content if not all requests are ready
   m.contentCache = m.top.findNode("contentCache")
 
 	' UriFetcher event loop
-	while true
-		msg = wait(0, m.port)
-		mt = type(msg)
-		print "UriFetcher: received event type '"; mt; "'"
+  while true
+    msg = wait(0, m.port)
+    mt = type(msg)
+    print "UriFetcher: received event type '"; mt; "'"
     ' If a request was made
-		if mt = "roSGNodeEvent"
-			if msg.getField()="request"
-        print "received a request"
-				if addRequest(msg.getData()) <> true then print "Invalid request"
-			else if msg.getField()="numRowsReceived"
-        print "finished parsing response"
+    if mt = "roSGNodeEvent"
+      if msg.getField()="request"
+        if addRequest(msg.getData()) <> true then print "Invalid request"
+      else if msg.getField()="numRowsReceived"
         updateContent()
       else
-				print "UriFetcher: unrecognized field '"; msg.getField(); "'"
-			end if
+        print "UriFetcher: unrecognized field '"; msg.getField(); "'"
+      end if
     ' If a response was received
     else if mt="roUrlEvent"
       print "received a response"
-			processResponse(msg)
+      processResponse(msg)
     ' Handle unexpected cases
-		else
-			print "UriFetcher: unrecognized event type '"; mt; "'"
-		end if
-	end while
+    else
+	   print "UriFetcher: unrecognized event type '"; mt; "'"
+    end if
+  end while
 end sub
 
 ' addRequest():
@@ -130,7 +128,7 @@ end sub
 ' 	False if invalid request
 function addRequest(request as Object) as Boolean
   print "UriHandler.brs - [addRequest]"
-	' If valid request
+  ' If valid request
   if type(request) = "roAssociativeArray"
     context = request.context
   	if type(context) = "roSGNode"
@@ -154,10 +152,17 @@ function addRequest(request as Object) as Boolean
           print "UriFetcher: invalid uri: "; uri
           m.top.numBadRequests++
   			end if
+      else
+        print "Error: parameters is the wrong type: " + type(parameters)
+        return false
       end if
   	else
+      print "Error: context is the wrong type: " + type(context)
   		return false
   	end if
+  else
+    print "Error: request was not of type AA"
+    return false
   end if
   return true
 end function
@@ -169,33 +174,33 @@ end function
 ' 	msg: a roUrlEvent (https://sdkdocs.roku.com/display/sdkdoc/roUrlEvent)
 sub processResponse(msg as Object)
   print "UriHandler.brs - [processResponse]"
-	idKey = stri(msg.GetSourceIdentity()).trim()
-	job = m.jobsById[idKey]
-	if job <> invalid
+  idKey = stri(msg.GetSourceIdentity()).trim()
+  job = m.jobsById[idKey]
+  if job <> invalid
     context = job.context
     parameters = context.context.parameters
     jobnum = job.context.context.num
     uri = parameters.uri
-		print "UriFetcher: response for transfer '"; idkey; "' for URI '"; uri; "'"
-		result = {
+    print "UriHandler: response for transfer '"; idkey; "' for URI '"; uri; "'"
+    result = {
       code:    msg.GetResponseCode(),
       headers: msg.GetResponseHeaders(),
       content: msg.GetString(),
       num:     jobnum
     }
-		' could handle various error codes, retry, etc. here
-		m.jobsById.delete(idKey)
+    ' could handle various error codes, retry, etc. here
+    m.jobsById.delete(idKey)
     job.context.context.response = result
     if msg.GetResponseCode() = 200
       parseResponse(result.content, result.num)
     else
-      print "Error status code was: " + (msg.GetResponseCode()).toStr()
+      print "UriHandler: Error:  status code was: " + (msg.GetResponseCode()).toStr()
       m.top.numBadRequests++
       m.top.numRowsReceived++
     end if
-	else
-		print "UriFetcher: event for unknown job "; idkey
-	end if
+  else
+    print "UriHandler: Error: event for unknown job "; idkey
+  end if
 end sub
 
 ' Parses the response string as XML

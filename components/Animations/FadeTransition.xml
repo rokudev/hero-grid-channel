@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!-- Copyright 2016 Roku Corp.  All Rights Reserved. -->
 
-<!-- FadingBackground - Background for all nodes. It is basically poster that
+<!-- FadeTransition - Fades between screens. It is basically poster that
      gets picture Url from HDBackgroundImageUrl field of content meta-data of
      current focused item. Between switching uri, starts animation with fading
      out old image and fading in new picture after loading.-->
@@ -52,6 +52,6 @@
     <field id="ShadeOpacity"  type="float" alias="shade.opacity"/>
   </interface>
 
-  <script type="text/brightscript" uri="pkg:/components/FadingBackground/FadingBackground.brs" />
+  <script type="text/brightscript" uri="pkg:/components/Animations/FadingBackground.brs" />
 
 </component>

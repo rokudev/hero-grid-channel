@@ -10,7 +10,7 @@
       id="Background"
       width="1920"
       height="1080"
-      color="0xAAAAAA"
+      color="0x000000"
       ShadeOpacity="0.8" />
 
     <!-- The main content -->
@@ -55,5 +55,5 @@
   </interface>
 
   <script type="text/brightscript" uri="pkg:/components/HeroScreen/HeroScreen.brs" />
-  
+
 </component>
