@@ -58,15 +58,6 @@ sub updateContent()
   end if
 end sub
 
-' Timer callback function - runs in the render thread
-sub checkContent()
-  if m.top.numRowsReceived <> m.top.numRows
-    print "not all content done"
-  else
-    print "all content done"
-  end if
-end sub
-
 ' go(): The "Task" function.
 '   Has an event loop which calls the appropriate functions for
 '   handling requests made by the HeroScreen and responses when requests are finished
@@ -83,12 +74,6 @@ sub go()
   'Holds requests by id
   m.jobsById = {}
 
-  ' For displaying a dialog to the user after 4 seconds if content not ready
-  m.timer = createObject("roSGNode","Timer")
-  m.timer.duration = 4
-  m.timer.observeField("fire", "checkContent")
-  m.timer.control = "start"
-
   ' Stores the content if not all requests are ready
   m.contentCache = m.top.findNode("contentCache")
 
@@ -96,7 +81,7 @@ sub go()
   while true
     msg = wait(0, m.port)
     mt = type(msg)
-    print "UriFetcher: received event type '"; mt; "'"
+    print "UriHandler: received event type '"; mt; "'"
     ' If a request was made
     if mt = "roSGNodeEvent"
       if msg.getField()="request"
@@ -104,15 +89,14 @@ sub go()
       else if msg.getField()="numRowsReceived"
         updateContent()
       else
-        print "UriFetcher: unrecognized field '"; msg.getField(); "'"
+        print "UriHandler Error: unrecognized field '"; msg.getField() ; "'"
       end if
     ' If a response was received
     else if mt="roUrlEvent"
-      print "received a response"
       processResponse(msg)
     ' Handle unexpected cases
     else
-	   print "UriFetcher: unrecognized event type '"; mt; "'"
+	   print "UriHandler Error: unrecognized event type '"; mt ; "'"
     end if
   end while
 end sub
@@ -147,9 +131,9 @@ function addRequest(request as Object) as Boolean
             context: request,
             xfer: urlXfer
           }
-  		    print "UriFetcher: initiating transfer '"; idkey; "' for URI '"; uri; "'"; " succeeded: "; ok
+  		    print "initiating transfer '"; idkey; "' for URI '"; uri; "'"; " succeeded: "; ok
         else
-          print "UriFetcher: invalid uri: "; uri
+          print "Error: invalid uri: "; uri
           m.top.numBadRequests++
   			end if
       else
@@ -161,7 +145,7 @@ function addRequest(request as Object) as Boolean
   		return false
   	end if
   else
-    print "Error: request was not of type AA"
+    print "Error: request is the wrong type: " + type(request)
     return false
   end if
   return true
@@ -181,7 +165,7 @@ sub processResponse(msg as Object)
     parameters = context.context.parameters
     jobnum = job.context.context.num
     uri = parameters.uri
-    print "UriHandler: response for transfer '"; idkey; "' for URI '"; uri; "'"
+    print "response for transfer '"; idkey; "' for URI '"; uri; "'"
     result = {
       code:    msg.GetResponseCode(),
       headers: msg.GetResponseHeaders(),
@@ -194,12 +178,12 @@ sub processResponse(msg as Object)
     if msg.GetResponseCode() = 200
       parseResponse(result.content, result.num)
     else
-      print "UriHandler: Error:  status code was: " + (msg.GetResponseCode()).toStr()
+      print "Error: status code was: " + (msg.GetResponseCode()).toStr()
       m.top.numBadRequests++
       m.top.numRowsReceived++
     end if
   else
-    print "UriHandler: Error: event for unknown job "; idkey
+    print "Error: event for unknown job "; idkey
   end if
 end sub
 
@@ -281,7 +265,7 @@ sub parseResponse(str As String, num as Integer)
     m.contentCache.addFields(contentAA)
     m.top.numRowsReceived++
   else
-    print "invalid content!"
+    print "Error: content was invalid"
   end if
 end sub
 
@@ -336,6 +320,7 @@ end function
 
 ' Helper function to add and set fields of a content node
 function AddAndSetFields(node as object, aa as object)
+  'This gets called for every content node -- commented out since there's a lot of calls
   'print "UriHandler.brs - [AddAndSetFields]"
   addFields = {}
   setFields = {}
