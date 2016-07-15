@@ -5,7 +5,6 @@
  ' configures buttons for Details screen
 Function Init()
   print "DetailsScreen.brs - [init]"
-
   m.top.observeField("visible", "onVisibleChange")
   m.top.observeField("focusedChild", "OnFocusedChildChange")
 
@@ -25,7 +24,7 @@ End Function
 
 ' set proper focus to buttons if Details opened and stops Video if Details closed
 Sub onVisibleChange()
-  ? "DetailsScreen.brs - [onVisibleChange]"
+  print "DetailsScreen.brs - [onVisibleChange]"
   if m.top.visible
     m.buttons.jumpToItem = 0
     m.buttons.setFocus(true)

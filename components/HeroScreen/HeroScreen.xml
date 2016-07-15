@@ -21,7 +21,7 @@
       itemSize="[1920,220]"
       numRows="9"
       rowFocusAnimationStyle="FixedFocusWrap"
-      rowHeights="[800,254,584]"
+      rowHeights="[800,300,615]"
       rowItemSize="[[1600,700],[375,197],[375,526],[375,197]]"
       rowItemSpacing="[[30,0]]"
       rowLabelOffset="[[165,8]]"
