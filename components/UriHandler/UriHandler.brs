@@ -14,7 +14,7 @@ sub init()
   print "UriHandler.brs - [init]"
 
   ' create the message port
-	m.port = createObject("roMessagePort")
+  m.port = createObject("roMessagePort")
 
   ' fields for checking if content has been loaded
   ' each row is assumed to be a different request for a rss feed
@@ -27,8 +27,8 @@ sub init()
   m.top.observeField("numRowsReceived", m.port)
 
   ' setting the task thread function
-	m.top.functionName = "go"
-	m.top.control = "RUN"
+  m.top.functionName = "go"
+  m.top.control = "RUN"
 end sub
 
 ' Callback function for when content has finished parsing
@@ -71,7 +71,8 @@ end sub
 '         val: the roUrlTransfer object
 sub go()
   print "UriHandler.brs - [go]"
-  'Holds requests by id
+
+  ' Holds requests by id
   m.jobsById = {}
 
   ' Stores the content if not all requests are ready
@@ -81,7 +82,7 @@ sub go()
   while true
     msg = wait(0, m.port)
     mt = type(msg)
-    print "UriHandler: received event type '"; mt; "'"
+    print "Received event type '"; mt; "'"
     ' If a request was made
     if mt = "roSGNodeEvent"
       if msg.getField()="request"
@@ -89,14 +90,14 @@ sub go()
       else if msg.getField()="numRowsReceived"
         updateContent()
       else
-        print "UriHandler Error: unrecognized field '"; msg.getField() ; "'"
+        print "Error: unrecognized field '"; msg.getField() ; "'"
       end if
     ' If a response was received
     else if mt="roUrlEvent"
       processResponse(msg)
     ' Handle unexpected cases
     else
-	   print "UriHandler Error: unrecognized event type '"; mt ; "'"
+	   print "Error: unrecognized event type '"; mt ; "'"
     end if
   end while
 end sub
@@ -112,7 +113,7 @@ end sub
 ' 	False if invalid request
 function addRequest(request as Object) as Boolean
   print "UriHandler.brs - [addRequest]"
-  ' If valid request
+
   if type(request) = "roAssociativeArray"
     context = request.context
   	if type(context) = "roSGNode"
@@ -127,11 +128,15 @@ function addRequest(request as Object) as Boolean
           idKey = stri(urlXfer.getIdentity()).trim()
           ' AsyncGetToString returns false if the request couldn't be issued
           ok = urlXfer.AsyncGetToString()
-          if ok then m.jobsById[idKey] = {
-            context: request,
-            xfer: urlXfer
-          }
-  		    print "initiating transfer '"; idkey; "' for URI '"; uri; "'"; " succeeded: "; ok
+          if ok then
+            m.jobsById[idKey] = {
+              context: request,
+              xfer: urlXfer
+            }
+          else
+            print "Error: request couldn't be issued"
+          end if
+  		    print "Initiating transfer '"; idkey; "' for URI '"; uri; "'"; " succeeded: "; ok
         else
           print "Error: invalid uri: "; uri
           m.top.numBadRequests++
@@ -165,7 +170,7 @@ sub processResponse(msg as Object)
     parameters = context.context.parameters
     jobnum = job.context.context.num
     uri = parameters.uri
-    print "response for transfer '"; idkey; "' for URI '"; uri; "'"
+    print "Response for transfer '"; idkey; "' for URI '"; uri; "'"
     result = {
       code:    msg.GetResponseCode(),
       headers: msg.GetResponseHeaders(),
@@ -294,7 +299,7 @@ function createGrid(list as object)
   for i = 0 to list.count() step 4
     row = createObject("RoSGNode","ContentNode")
     if i = 0
-      row.Title = "THE GRID"
+      row.Title = "The Grid"
     end if
     for j = i to i + 3
       if list[j] <> invalid
@@ -320,7 +325,7 @@ end function
 
 ' Helper function to add and set fields of a content node
 function AddAndSetFields(node as object, aa as object)
-  'This gets called for every content node -- commented out since there's a lot of calls
+  'This gets called for every content node -- commented out since it's pretty verbose
   'print "UriHandler.brs - [AddAndSetFields]"
   addFields = {}
   setFields = {}
