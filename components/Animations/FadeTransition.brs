@@ -31,7 +31,7 @@ End Sub
 
 ' If Size changed, change parameters to childrens'
 Sub OnSizeChange()
-  print "FadingBackground.brs - [OnSizeChange]"
+  'print "FadingBackground.brs - [OnSizeChange]"
   size = m.top.size
 
   m.background.width = m.top.width
