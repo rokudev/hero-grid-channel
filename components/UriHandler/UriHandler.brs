@@ -34,7 +34,7 @@ end sub
 ' Callback function for when content has finished parsing
 sub updateContent()
   print "UriHandler.brs - [updateContent]"
-  
+
   ' Return if the content is already set
   if m.top.contentSet = true then return
   ' Set the UI if all content from all streams are ready
@@ -191,6 +191,7 @@ sub processResponse(msg as Object)
     else
       print "Error status code was: " + (msg.GetResponseCode()).toStr()
       m.top.numBadRequests++
+      m.top.numRowsReceived++
     end if
 	else
 		print "UriFetcher: event for unknown job "; idkey
@@ -330,7 +331,7 @@ end function
 
 ' Helper function to add and set fields of a content node
 function AddAndSetFields(node as object, aa as object)
-  print "UriHandler.brs - [AddAndSetFields]"
+  'print "UriHandler.brs - [AddAndSetFields]"
   addFields = {}
   setFields = {}
   for each field in aa
