@@ -13,6 +13,8 @@ Function Init()
   m.poster            =   m.top.findNode("Poster")
   m.description       =   m.top.findNode("Description")
   m.background        =   m.top.findNode("Background")
+  m.fadeIn            =   m.top.findNode("fadeinAnimation")
+  m.fadeOut           =   m.top.findNode("fadeoutAnimation")
 
   ' create buttons
   result = []
@@ -26,9 +28,11 @@ End Function
 Sub onVisibleChange()
   print "DetailsScreen.brs - [onVisibleChange]"
   if m.top.visible
+    m.fadeIn.control="start"
     m.buttons.jumpToItem = 0
     m.buttons.setFocus(true)
   else
+    m.fadeOut.control="start"
     m.videoPlayer.visible = false
     m.videoPlayer.control = "stop"
     m.poster.uri=""

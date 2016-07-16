@@ -11,14 +11,20 @@
     <Rectangle
       id="backgroundColor"/>
     <Poster
-      id="oldBackground"/>
+      id="oldBackground"
+      loadDisplayMode="scaleToFill"
+      loadHeight="48"
+      loadWidth="48"/>
     <Poster
       id="background"
+      loadDisplayMode="scaleToFill"
+      loadHeight="48"
+      loadWidth="48"
       opacity="0"/>
     <Rectangle
       id="shade"
       color="0x000000"
-      opacity="0.65"/>
+      opacity="0.8"/>
 
     <Animation
       id="fadeoutAnimation"
@@ -34,7 +40,6 @@
     <Animation
       id="fadeinAnimation"
       repeat="false"
-      easeFunction="linear"
       duration="0.5">
       <FloatFieldInterpolator
         id="backgroundInterpolator"

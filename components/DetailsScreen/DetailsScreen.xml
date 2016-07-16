@@ -11,6 +11,28 @@
       width="1920"
       height="1080" />
 
+    <Animation
+      id="fadeinAnimation"
+      repeat="false"
+      duration="0.3">
+      <FloatFieldInterpolator
+        id="backgroundInterpolator"
+        key="[0.0, 1.0]"
+        keyValue="[0.0, 1.0]"
+        fieldToInterp="Background.opacity"/>
+    </Animation>
+
+    <Animation
+      id="fadeoutAnimation"
+      repeat="false"
+      duration="0.3">
+      <FloatFieldInterpolator
+        id="backgroundInterpolator"
+        key="[0.0, 1.0]"
+        keyValue="[1.0, 0.0]"
+        fieldToInterp="Background.opacity"/>
+    </Animation>
+
     <!-- Background fade -->
     <Rectangle
       translation="[0,0]"

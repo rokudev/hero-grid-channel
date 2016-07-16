@@ -44,7 +44,7 @@
     <!-- Row item selection handler -->
     <field id="rowItemSelected" type="intarray" alias="RowList.rowItemSelected" alwaysnotify="true"/>
 
-    <!-- Row item focused handler -->
+    <!-- Row item focused handler - sets background image uri and focusedContent field -->
     <field id="itemFocused" type="intarray" alias="RowList.rowItemFocused" onChange="OnItemFocused"/>
 
     <!-- Interface to focused item (Content Node) -->

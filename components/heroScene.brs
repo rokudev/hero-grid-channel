@@ -12,6 +12,9 @@ sub init()
   m.LoadingIndicator = m.top.findNode("LoadingIndicator")
   ' Dialog box node. Appears if content can't be loaded
   m.WarningDialog = m.top.findNode("WarningDialog")
+  ' Transitions between screens
+  m.FadeIn = m.top.findNode("FadeIn")
+  m.FadeOut = m.top.findNode("FadeOut")
   ' Set focus to the scene
   m.top.setFocus(true)
 end sub
@@ -40,6 +43,7 @@ end sub
 ' On select any item on home scene, show Details node and hide Grid.
 sub OnRowItemSelected()
   'print "HeroScene.brs - [OnRowItemSelected]"
+  m.FadeIn.control = "start"
   m.HeroScreen.visible = "false"
   m.DetailsScreen.content = m.HeroScreen.focusedContent
   m.DetailsScreen.setFocus(true)
@@ -61,6 +65,7 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
         result = true
       ' if Details opened
       else if m.HeroScreen.visible = false and m.DetailsScreen.videoPlayerVisible = false
+        m.FadeOut.control = "start"
         m.HeroScreen.visible = "true"
         m.detailsScreen.visible = "false"
         m.HeroScreen.setFocus(true)

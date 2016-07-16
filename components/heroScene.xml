@@ -46,12 +46,66 @@
       font="font:SmallBoldSystemFont"
       backgroundColor="0x551A8B"
       backgroundOpacity="0"/>
+
+    <!-- Animation to fade the ScreenFade in/out -->
+    <ParallelAnimation id="FadeIn">
+      <Animation
+        id="HFadeOut"
+        duration=".6"
+        repeat="false"
+        easeFunction="inQuad">
+        <FloatFieldInterpolator
+          id="HFadeOutInterp"
+          key="[0,1]"
+          keyValue="[1.0, 0.0]"
+          fieldToInterp="HeroScreen.opacity"/>
+      </Animation>
+      <Animation
+        id="DSFadeIn"
+        duration=".6"
+        repeat="false"
+        easeFunction="inQuad">
+        <FloatFieldInterpolator
+          id="DSFadeInInterp"
+          key="[0,1]"
+          keyValue="[0.0, 1.0]"
+          fieldToInterp="DetailsScreen.opacity"/>
+      </Animation>
+    </ParallelAnimation>
+
+    <!-- Animation to fade the ScreenFade in/out -->
+    <ParallelAnimation id="FadeOut">
+      <Animation
+        id="HFadeIn"
+        duration=".6"
+        repeat="false"
+        easeFunction="inQuad">
+        <FloatFieldInterpolator
+          id="HFadeInInterp"
+          key="[0,1]"
+          keyValue="[0.0, 1.0]"
+          fieldToInterp="HeroScreen.opacity"/>
+      </Animation>
+      <Animation
+        id="DSFadeOut"
+        duration=".6"
+        repeat="false"
+        easeFunction="inQuad">
+        <FloatFieldInterpolator
+          id="DSFadeOutInterp"
+          key="[0,1]"
+          keyValue="[1.0, 0.0]"
+          fieldToInterp="DetailsScreen.opacity"/>
+      </Animation>
+    </ParallelAnimation>
+
   </children>
 
   <interface>
     <field id="content" type="node" alias="HeroScreen.content" onChange="OnChangeContent" />
     <field id="numBadRequests" type="integer" value="0" alias="HeroScreen.numBadRequests" />
     <field id="rowItemSelected" type="intarray" alias="HeroScreen.rowItemSelected" alwaysNotify="true" onChange="OnRowItemSelected" />
+    <field id="itemFocused" type="intarray" alias="RowList.rowItemFocused" onChange="OnItemFocused"/>
   </interface>
 
   <script type="text/brightscript" uri="pkg:/components/HeroScene.brs" />
