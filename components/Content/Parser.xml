@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<component name="Parser" extends="ContentNode">
+  <interface>
+    <!-- Contains the response content -->
+    <field id="response" type="assocarray" onChange="parseResponse"/>
+  </interface>
+
+  <script type="text/brightscript" uri="pkg:/components/Content/SGHelperFunctions.brs"/>
+  <script type="text/brightscript" uri="pkg:/components/Content/Parser.brs"/>
+</component>

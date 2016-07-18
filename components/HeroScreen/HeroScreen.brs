@@ -10,16 +10,19 @@ sub Init()
   m.background    =   m.top.findNode("Background")
 
   'Create a task node to fetch the UI content and populate the screen
-  m.UriHandler    =   CreateObject("roSGNode", "UriHandler")
+  m.UriHandler = CreateObject("roSGNode", "UriHandler")
   m.UriHandler.observeField("content", "onContentChanged")
 
-  'Make a request for each "row" in the UI
-  ' Uncomment this line to simulate a bad request and make the dialog box appear
-  'request("bad request", 4)
-  request("http://api.delvenetworks.com/rest/organizations/59021fabe3b645968e382ac726cd6c7b/channels/1cfd09ab38e54f48be8498e0249f5c83/media.rss", 0)
-  request("http://api.delvenetworks.com/rest/organizations/59021fabe3b645968e382ac726cd6c7b/channels/5a438a6cfe68407684832d54c4b58cbb/media.rss", 1)
-  request("http://api.delvenetworks.com/rest/organizations/59021fabe3b645968e382ac726cd6c7b/channels/4cd8f3ec67c64c16b8f3bf87339503dd/media.rss", 2)
-  request("http://api.delvenetworks.com/rest/organizations/59021fabe3b645968e382ac726cd6c7b/channels/c7f9e852f45044ceb0ae0d7748d675a5/media.rss", 3)
+  'Make a request for each "row" in the UI (in the order that you want content filled)
+  URLs = [
+    ' Uncomment this line to simulate a bad request and make the dialog box appear
+    ' "bad request",
+    "http://api.delvenetworks.com/rest/organizations/59021fabe3b645968e382ac726cd6c7b/channels/1cfd09ab38e54f48be8498e0249f5c83/media.rss",
+    "http://api.delvenetworks.com/rest/organizations/59021fabe3b645968e382ac726cd6c7b/channels/5a438a6cfe68407684832d54c4b58cbb/media.rss",
+    "http://api.delvenetworks.com/rest/organizations/59021fabe3b645968e382ac726cd6c7b/channels/4cd8f3ec67c64c16b8f3bf87339503dd/media.rss",
+    "http://api.delvenetworks.com/rest/organizations/59021fabe3b645968e382ac726cd6c7b/channels/c7f9e852f45044ceb0ae0d7748d675a5/media.rss"
+  ]
+  makeRequest(URLs,"Parser")
 
   'Create observer events for when content is loaded
   m.top.observeField("visible", "onVisibleChange")
@@ -27,18 +30,23 @@ sub Init()
 end sub
 
 ' Issues a URL request to the UriHandler component
-sub request(inputURI as String, feedNum as Integer)
-  'print "HeroScreen.brs - [request]"
-  context = createObject("roSGNode", "Node")
-  uri = { uri: inputURI }
-  if type(uri) = "roAssociativeArray"
-    context.addFields({
-      parameters: uri,
-      num: feedNum,
-      response: {}
-    })
-    m.UriHandler.request = { context: context }
-  end if
+sub makeRequest(URLs as object, ParserComponent as String)
+  'print "HeroScreen.brs - [makeRequest]"
+  for i = 0 to URLs.count() - 1
+    context = createObject("roSGNode", "Node")
+    uri = { uri: URLs[i] }
+    if type(uri) = "roAssociativeArray"
+      context.addFields({
+        parameters: uri,
+        num: i,
+        response: {}
+      })
+      m.UriHandler.request = {
+        context: context
+        parser: ParserComponent
+      }
+    end if
+  end for
 end sub
 
 ' observer function to handle when content loads

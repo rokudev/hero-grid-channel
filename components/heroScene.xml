@@ -51,7 +51,7 @@
     <ParallelAnimation id="FadeIn">
       <Animation
         id="HFadeOut"
-        duration=".6"
+        duration=".4"
         repeat="false"
         easeFunction="inQuad">
         <FloatFieldInterpolator
@@ -62,7 +62,7 @@
       </Animation>
       <Animation
         id="DSFadeIn"
-        duration=".6"
+        duration=".4"
         repeat="false"
         easeFunction="inQuad">
         <FloatFieldInterpolator
@@ -77,7 +77,7 @@
     <ParallelAnimation id="FadeOut">
       <Animation
         id="HFadeIn"
-        duration=".6"
+        duration=".4"
         repeat="false"
         easeFunction="inQuad">
         <FloatFieldInterpolator
@@ -88,7 +88,7 @@
       </Animation>
       <Animation
         id="DSFadeOut"
-        duration=".6"
+        duration=".4"
         repeat="false"
         easeFunction="inQuad">
         <FloatFieldInterpolator

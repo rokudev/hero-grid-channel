@@ -20,11 +20,15 @@ sub init()
   ' each row is assumed to be a different request for a rss feed
   m.top.numRows = 4
   m.top.numRowsReceived = 0
+  m.top.numBadRequests = 0
   m.top.contentSet = false
+
+  ' Stores the content if not all requests are ready
+  m.top.ContentCache = createObject("roSGNode", "ContentNode")
 
   ' setting callbacks for url request and response
   m.top.observeField("request", m.port)
-  m.top.observeField("numRowsReceived", m.port)
+  m.top.observeField("ContentCache", m.port)
 
   ' setting the task thread function
   m.top.functionName = "go"
@@ -35,15 +39,18 @@ end sub
 sub updateContent()
   print "UriHandler.brs - [updateContent]"
 
+  ' Received another row of content
+  m.top.numRowsReceived++
+
   ' Return if the content is already set
   if m.top.contentSet return
   ' Set the UI if all content from all streams are ready
   ' Note: this technique is hindered by slowest request
-  ' Try to think of a better asynchronous method here!
+  ' Need to think of a better asynchronous method here!
   if m.top.numRows = m.top.numRowsReceived
     parent = createObject("roSGNode", "ContentNode")
     for i = 0 to (m.top.numRowsReceived - 1)
-      oldParent = m.contentCache.getField(i.toStr())
+      oldParent = m.top.contentCache.getField(i.toStr())
       if oldParent <> invalid
         for j = 0 to (oldParent.getChildCount() - 1)
           oldParent.getChild(0).reparent(parent,true)
@@ -75,9 +82,6 @@ sub go()
   ' Holds requests by id
   m.jobsById = {}
 
-  ' Stores the content if not all requests are ready
-  m.contentCache = m.top.findNode("contentCache")
-
 	' UriFetcher event loop
   while true
     msg = wait(0, m.port)
@@ -87,7 +91,7 @@ sub go()
     if mt = "roSGNodeEvent"
       if msg.getField()="request"
         if addRequest(msg.getData()) <> true then print "Invalid request"
-      else if msg.getField()="numRowsReceived"
+      else if msg.getField()="ContentCache"
         updateContent()
       else
         print "Error: unrecognized field '"; msg.getField() ; "'"
@@ -116,6 +120,18 @@ function addRequest(request as Object) as Boolean
 
   if type(request) = "roAssociativeArray"
     context = request.context
+    parser = request.parser
+    if type(parser) = "roString"
+      if m.Parser = invalid
+        m.Parser = createObject("roSGNode", parser)
+        m.Parser.observeField("parsedContent", m.port)
+      else
+        print "Parser already created"
+      end if
+    else
+      print "Error: Incorrect type for Parser: " ; type(parser)
+      return false
+    end if
   	if type(context) = "roSGNode"
       parameters = context.parameters
       if type(parameters)="roAssociativeArray"
@@ -181,7 +197,8 @@ sub processResponse(msg as Object)
     m.jobsById.delete(idKey)
     job.context.context.response = result
     if msg.GetResponseCode() = 200
-      parseResponse(result.content, result.num)
+      'm.Parser.response = (result.content, result.num)
+      m.Parser.response = result
     else
       print "Error: status code was: " + (msg.GetResponseCode()).toStr()
       m.top.numBadRequests++
@@ -191,151 +208,3 @@ sub processResponse(msg as Object)
     print "Error: event for unknown job "; idkey
   end if
 end sub
-
-' Parses the response string as XML
-' The parsing logic will be different for different RSS feeds
-sub parseResponse(str As String, num as Integer)
-  print "UriHandler.brs - [parseResponse]"
-
-  if str = invalid return
-  xml = CreateObject("roXMLElement")
-  ' Return invalid if string can't be parsed
-  if not xml.Parse(str) return
-
-  if xml <> invalid then
-    xml = xml.getchildelements()
-    responsearray = xml.getchildelements()
-  end if
-
-  result = []
-  'responsearray - <channel>'
-  for each xmlitem in responsearray
-    ' <title>, <link>, <description>, <pubDate>, <image>, and lots of <item>'s
-    if xmlitem.getname() = "item"
-      ' All things related to one item (title, link, description, media:content, etc.)
-      itemaa = xmlitem.getchildelements()
-      if itemaa <> invalid
-        item = {}
-        ' Get all <item> attributes
-        for each xmlitem in itemaa
-          item[xmlitem.getname()] = xmlitem.gettext()
-          if xmlitem.getname() = "media:content"
-            item.stream = {url : xmlitem.url}
-            item.url = xmlitem.getattributes().url
-            item.streamformat = "mp4"
-
-            mediacontent = xmlitem.getchildelements()
-            for each mediacontentitem in mediacontent
-              if mediacontentitem.getname() = "media:thumbnail"
-                item.hdposterurl = mediacontentitem.getattributes().url
-                item.hdbackgroundimageurl = mediacontentitem.getattributes().url
-                item.uri = mediacontentitem.getattributes().url
-              end if
-            end for
-          end if
-        end for
-        result.push(item)
-      end if
-    end if
-  end for
-
-  'For the 3 rows before the "grid"
-  list = [
-    {
-        Title:"Big Hits"
-        ContentList : result
-    }
-    {
-        Title:"Action"
-        ContentList : result
-    }
-    {
-        Title:"Drama"
-        ContentList : result
-    }
-  ]
-
-  'Logic for creating a "row" vs. a "grid"
-  contentAA = {}
-  content = invalid
-  if num = 3
-    content = createGrid(result)
-  else
-    content = createRow(list, num)
-  end if
-
-  'Add the newly parsed content row/grid to the cache until everything is ready
-  if content <> invalid
-    contentAA[num.toStr()] = content
-    m.contentCache.addFields(contentAA)
-    m.top.numRowsReceived++
-  else
-    print "Error: content was invalid"
-  end if
-end sub
-
-'Create a row of content
-function createRow(list as object, num as Integer)
-  print "UriHandler.brs - [createRow]"
-  Parent = createObject("RoSGNode", "ContentNode")
-  row = createObject("RoSGNode", "ContentNode")
-  row.Title = list[num].Title
-  for each itemAA in list[num].ContentList
-    item = createObject("RoSGNode","ContentNode")
-    AddAndSetFields(item, itemAA)
-    row.appendChild(item)
-  end for
-  Parent.appendChild(row)
-  return Parent
-end function
-
-'Create a grid of content - simple splitting of a feed to different rows
-'with the title of the row hidden.
-'Set the for loop parameters to adjust how many columns there
-'should be in the grid.
-function createGrid(list as object)
-  print "UriHandler.brs - [createGrid]"
-  Parent = createObject("RoSGNode","ContentNode")
-  for i = 0 to list.count() step 4
-    row = createObject("RoSGNode","ContentNode")
-    if i = 0
-      row.Title = "The Grid"
-    end if
-    for j = i to i + 3
-      if list[j] <> invalid
-        item = createObject("RoSGNode","ContentNode")
-        AddAndSetFields(item,list[j])
-        row.appendChild(item)
-      end if
-    end for
-    Parent.appendChild(row)
-  end for
-  return Parent
-end function
-
-' Helper function to select only a certain range of content'
-function select(array as object, first as integer, last as integer) as object
-  print "UriHandler.brs - [select]"
-  result = []
-  for i = first to last
-    result.push(array[i])
-  end for
-  return result
-end function
-
-' Helper function to add and set fields of a content node
-function AddAndSetFields(node as object, aa as object)
-  'This gets called for every content node -- commented out since it's pretty verbose
-  'print "UriHandler.brs - [AddAndSetFields]"
-  addFields = {}
-  setFields = {}
-  for each field in aa
-    if node.hasField(field)
-      setFields[field] = aa[field]
-    else
-      addFields[field] = aa[field]
-    end if
-  end for
-  node.setFields(setFields)
-  node.addFields(addFields)
-end function
