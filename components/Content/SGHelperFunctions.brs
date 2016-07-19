@@ -1,3 +1,4 @@
+' ********** Copyright 2016 Roku Corp.  All Rights Reserved. **********
 
 ' Helper function to select only a certain range of content
 function select(array as object, first as integer, last as integer) as object

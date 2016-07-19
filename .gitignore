@@ -4,3 +4,5 @@ out/
 .buildpath
 .settings/
 .tags1
+.tags
+Makefile

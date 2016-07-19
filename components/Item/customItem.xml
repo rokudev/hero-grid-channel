@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8" ?>
-
 <!-- Copyright 2016 Roku Corp.  All Rights Reserved. -->
 
 <component name="customItem" extends="Group">
@@ -38,5 +37,5 @@
   <children>
       <Poster id="poster" />
   </children>
-  
+
 </component>

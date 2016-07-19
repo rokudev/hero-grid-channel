@@ -45,7 +45,6 @@ Sub OnSizeChange()
   m.backgroundColor.height = m.top.height
 End Sub
 
-
 ' When Background image loaded, start animation
 Sub OnBackgroundLoaded()
   print "FadingBackground.brs - [OnBackgroundLoaded]"
