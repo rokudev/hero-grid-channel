@@ -27,16 +27,16 @@ This sample channel should be used as a starter template for your channel develo
 - Demonstrates how to display information to the user in a dialog box in case of failures to load content (e.g. bad URL request)
 
 ## Directory Structure
-- Components: The Scene Graph components
-  - DetailsScreen: All code related to the details screen
-  - Animations: Currently only contains fadingbackground.brs/xml, which is used for the transitions between each grid tile element
-  - HeroScreen: The main screen of the channel (i.e. the grid of content)
-  - Item: The individual tile element that the grid is comprised of
-  - LoadingIndicator: The spinning wheel displayed before content is available
-  - Content: Contains all files related to handling content (URL request/response + parsing + content node creation for populating the UI). UriHandler.brs/xml handles URL requests/responses. Parser.brs/xml handles parsing of the response. SGHelperFunctions.brs includes functions that are/may be useful for SceneGraph development (currently only has 2 functions but will grow in size as more utilities become abstracted and conventionalized).  
-  - HeroScene.brs/xml: The main scene. Acts as the controller in the MVC-like pattern of the channel.
-- Images: Contains image assets used in the channel
-- Source: Contains the main brightscript file that runs right when the channel starts
+- **Components:** The Scene Graph components
+  - **DetailsScreen:** All code related to the details screen
+  - **Animations:** Currently only contains **fadingbackground.brs/xml**, which is used for the transitions between each grid tile element
+  - **HeroScreen:** The main screen of the channel (i.e. the grid of content)
+  - **Item:** The individual tile element that the grid is comprised of
+  - **LoadingIndicator:** The spinning wheel displayed before content is available
+  - **Content:** Contains all files related to handling content (URL request/response + parsing + content node creation for populating the UI). **UriHandler.brs/xml** handles URL requests/responses. **Parser.brs/xml** handles parsing of the response. **SGHelperFunctions.brs** includes functions that are/may be useful for SceneGraph development (currently only has 2 functions but will grow in size as more utilities become abstracted and conventionalized).  
+  - **HeroScene.brs/xml:** The main scene. Acts as the controller in the MVC-like pattern of the channel.
+- **Images:** Contains image assets used in the channel
+- **Source:** Contains the main brightscript file that runs right when the channel starts
 
 ## Channel Flow
 This section explains what happens when the channel/app does and what the user sees as a result.
