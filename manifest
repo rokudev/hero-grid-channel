@@ -5,8 +5,8 @@
 #
 
 # Channel Details
-title=BigRokuHeroTile
-subtitle=Using a RowList
+title=HeroGridChannel
+subtitle=Roku Sample Channel App
 major_version=1
 minor_version=1
 build_version=1
