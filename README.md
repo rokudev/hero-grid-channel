@@ -1,14 +1,17 @@
 # HeroTileExample
 ![Roku](https://img.shields.io/badge/Roku-Dev-blue.svg)
 
-Hero Tile Sample Channel for the Roku Platform
+Hero Grid Sample Channel for the Roku Platform
 
 ## How to run this sample
-- Zip up the entire project directory and follow the developer set-up guide here: https://blog.roku.com/developer/2016/02/04/developer-setup-guide/
+- Zip up the entire project directory and deploy to your roku device. Follow the developer set-up guide here for a quick guide on how to do so: https://blog.roku.com/developer/2016/02/04/developer-setup-guide/
 - Alternatively, open up this project in Eclipse or Atom and use the corresponding plugin/package to export/deploy the channel.
+  - Eclipse plugin documentation in the SDK docs: https://sdkdocs.roku.com/display/sdkdoc/Eclipse+Plugin+Guide 
+  - The blog post for the Eclipse plugin: https://blog.roku.com/developer/2016/04/20/roku-eclipse-plugin/ 
+  - Roku Deploy package for Atom: https://atom.io/packages/roku-deploy 
 
 ## Features
-- Showcases a Hulu-like UI, varying the display of content by manipulating the built-in Scene Graph component
+- Showcases a Hulu channel-like UI, varying the display of content by manipulating the built-in Scene Graph component
   - Includes a (1) hero sized row, (2) normal row, (3) movie poster row, and (4) a grid row of content.
 - Uses both built-in and custom made Scene Graph components
 - Demonstrates how to handle multiple URL requests to fill in different rows of content (e.g. Movies, specific genres, etc.)
