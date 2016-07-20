@@ -17,7 +17,7 @@ This sample channel should be used as a starter template for your channel develo
   - Current version: https://my.roku.com/account/add?channel=NDQJKJ
 
 ## Features
-- Showcases a Hulu channel-like UI, varying the display of content by manipulating the built-in Scene Graph component
+- Showcases a grid-based UI, varying the display of content by manipulating the built-in Scene Graph component
   - Includes a (1) hero sized row, (2) normal row, (3) movie poster row, and (4) a grid row of content.
 - Showcases how to create multiple "screens" in a channel 
   - Includes the main grid screen, a details screen, and a screen that displays the video content.
