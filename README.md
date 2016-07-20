@@ -1,5 +1,4 @@
 # HeroTileExample
-![Roku](https://img.shields.io/badge/Roku-Dev-blue.svg)
 
 Hero Grid Sample Channel for the Roku Platform. 
 
