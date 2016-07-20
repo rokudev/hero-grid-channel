@@ -29,7 +29,7 @@ sub OnChangeContent()
     if m.top.numBadRequests > 0
       m.HeroScreen.visible = "true"
       m.WarningDialog.visible = "true"
-      m.WarningDialog.message = (m.top.numBadRequests).toStr() + " request(s) for content failed. Press '*' to try to request content again or OK or '<-' to continue."
+      m.WarningDialog.message = (m.top.numBadRequests).toStr() + " request(s) for content failed. Press '*' or OK or '<-' to continue."
     else
       m.HeroScreen.visible = "true"
       m.HeroScreen.setFocus(true)
