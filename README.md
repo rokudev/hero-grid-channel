@@ -1,4 +1,4 @@
-# HeroTileExample
+# Hero Grid Channel Example
 
 Hero Grid Sample Channel for the Roku Platform. 
 
