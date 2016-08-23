@@ -2,9 +2,9 @@
 
 Hero Grid Sample Channel for the Roku Platform. 
 
-![Hero-Grid-1](https://github.com/rokudev/hero-grid-channel/tree/master/images/HeroGridHome.jpg "HomeScreen-1")
-![Hero-Grid-2](https://github.com/rokudev/hero-grid-channel/tree/master/images/HeroGridHome2.jpg "HomeScreen-2")
-![Hero-Grid-d](https://github.com/rokudev/hero-grid-channel/tree/master/images/HeroGridDetails.jpg "HomeScreen-details")
+![Hero-Grid-1](https://raw.githubusercontent.com/rokudev/hero-grid-channel/master/images/HeroGridHome.jpg "HomeScreen-1")
+![Hero-Grid-2](https://raw.githubusercontent.com/rokudev/hero-grid-channel/master/images/HeroGridHome2.jpg "HomeScreen-2")
+![Hero-Grid-d](https://raw.githubusercontent.com/rokudev/hero-grid-channel/master/images/HeroGridDetails.jpg "HomeScreen-details")
 
 ## Use case
 This sample channel should be used as a starter template for your channel development. It demonstrates how to display content in a fairly conventional Roku UI from multiple RSS feeds performant on all devices on the Roku platform.   
