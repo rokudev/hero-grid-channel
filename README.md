@@ -56,5 +56,13 @@ This section explains what happens when the channel/app does and what the user s
 - Event: User presses the back button on the video
 - User: Sees the details screen.
 
+## Issues / Feature Requests
+- If you have an issue about this channel, please submit an issue on this repository or post on the Roku forums about this channel. 
+- To create an issue: https://help.github.com/articles/creating-an-issue/ 
+- The Roku forum: https://forums.roku.com/
+- If you have features that you have implemented and want to contribute to this channel's development, submit a pull request! 
+- To create a pull request: https://help.github.com/articles/creating-a-pull-request/
+- What is a pull request? https://help.github.com/articles/about-pull-requests/ 
+
 ### Known issues
 - The content may take a while to load (i.e. the loading wheel will be active for a long time) since the HTTP requests are asynchronous and the content is only loaded after all requests have their corresponding responses parsed for content. This is an issue with network latency and async requests. One way to mitigate this issue is to load content whenever you receive a response. However, the implementation is a bit tricky since the content may load in a different order than intended. Any suggestions/pull requests on this issue would be appreciated! 
